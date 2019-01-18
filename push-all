@@ -1,0 +1,12 @@
+#!/bin/sh -eu
+
+: "${CI_REGISTRY_IMAGE:=registry.gitlab.com/zimbatm/docker-nixpkgs}"
+: "${REGISTRY_URL:=$CI_REGISTRY_IMAGE/undefined}"
+
+releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+
+for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
+  file=$(echo "$releases_json" | jq -r ".\"$attr\"")
+  echo "--- $attr -> $file"
+  skopeo copy "docker-archive://$file" "docker://$REGISTRY_URL/$attr:latest"
+done

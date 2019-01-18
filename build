@@ -1,0 +1,6 @@
+#!/bin/sh -eu
+
+# build *all* the docker images
+nix-build release.nix \
+  --no-out-link \
+  "$@"
