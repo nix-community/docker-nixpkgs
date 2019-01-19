@@ -16,6 +16,7 @@ Nix has a number of advantages over Dockerfile when producing docker images:
 * builds are actually reproducible
 * Nix will only rebuild the minimum set of changes
 * Nix can produce automatic optimised layers for you
+* nixpkgs provides automatic security updates
 
 ## Example usage
 
@@ -42,10 +43,10 @@ $ docker run -ti --rm registry.gitlab.com/zimbatm/docker-nixpkgs/curl http://ifc
 
 ## Channels
 
-| Name           |
-| ---            |
-| nixos-unstable |
-| nixos-18.09    |
+| Name           | Description                |
+| ---            | ---                        |
+| nixos-unstable | the :latest version        |
+| nixos-18.09    | automatic security updates |
 
 
 [gitlab-schedules]: https://gitlab.com/zimbatm/docker-nixpkgs/pipeline_schedules
