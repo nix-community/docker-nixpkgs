@@ -26,7 +26,7 @@ image to image.
 # the user must have an account at gitlab
 $ docker login registry.gitlab.com
 # run the curl image which has curl as an entry-point
-$ docker run -ti --rm registry.gitlab.com/zimbatm/docker-nixpkgs/nixos-unstable/curl http://ifconfig.co
+$ docker run -ti --rm registry.gitlab.com/zimbatm/docker-nixpkgs/curl http://ifconfig.co
 180.52.248.114
 ```
 

@@ -11,11 +11,13 @@ nixos-unstable:
   extends: .build
   variables:
     NIXPKGS_CHANNEL: nixos-unstable
+    IMAGE_TAG: latest
 
 nixos-18.09:
   extends: .build
   variables:
     NIXPKGS_CHANNEL: nixos-18.09
+    IMAGE_TAG: nixos-18.09
 
 # ---- templates ---
 
@@ -26,5 +28,5 @@ nixos-18.09:
     - nix-shell --run .gitlab/push-master
   variables:
     NIX_PATH: "nixpkgs=channel:${NIXPKGS_CHANNEL}"
-    REGISTRY_URL: "${CI_REGISTRY_IMAGE}/${NIXPKGS_CHANNEL}"
+    REGISTRY_URL: "${CI_REGISTRY_IMAGE}"
 
