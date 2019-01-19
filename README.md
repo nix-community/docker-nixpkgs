@@ -32,11 +32,13 @@ $ docker run -ti --rm registry.gitlab.com/zimbatm/docker-nixpkgs/curl http://ifc
 
 ## List of images
 
-| Image        | Description                |
-| ---          | ---                        |
-| curl         | just curl as an entrypoint |
-| nix          | nix with deps              |
-| nix-unstable | nixUnstable with deps      |
+| Image           | Description           |
+| ---             | ---                   |
+| curl            | CLI only              |
+| kubectl         | CLI only              |
+| kubernetes-helm | CLI only              |
+| nix             | nix with deps         |
+| nix-unstable    | nixUnstable with deps |
 
 ## Channels
 
