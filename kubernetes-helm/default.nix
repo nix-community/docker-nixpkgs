@@ -2,7 +2,7 @@
 , cacert
 , kubernetes-helm
 }:
-dockerTools.buildImage {
+dockerTools.buildLayeredImage {
   inherit (kubernetes-helm) name;
 
   contents = [

@@ -2,7 +2,7 @@
 , cacert
 , kubectl
 }:
-dockerTools.buildImage {
+dockerTools.buildLayeredImage {
   inherit (kubectl) name;
 
   contents = [

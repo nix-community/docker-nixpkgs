@@ -2,7 +2,7 @@
 , cacert
 , curl
 }:
-dockerTools.buildImage {
+dockerTools.buildLayeredImage {
   inherit (curl) name;
 
   contents = [
