@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+#
+# A simplified docker login approach that doesn't depends on the docker binary
+#
+# Usage: ./docker-login <registry> <username> <password>
+set -euo pipefail
+
+registry=$1
+username=$2
+password=$3
+
+mkdir ~/.docker
+
+cat <<DOCKER_CONF > ~/.docker/config.json
+{
+  "auths": {
+    "$CI_REGISTRY": {
+      "auth": "$(printf "%s:%s" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64)"
+    }
+  }
+}
+DOCKER_CONF

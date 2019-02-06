@@ -1,6 +1,0 @@
-#!/bin/sh -eu
-if [ "$CI_COMMIT_REF_NAME" = master ]; then
-  exec ./push-all
-else
-  echo "=== not pushing on non-master ==="
-fi

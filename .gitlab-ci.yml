@@ -2,31 +2,17 @@ image: nixos/nix:latest
 
 stages:
   - build
-  - publish
-
-before_script:
-  - nix-shell --run .gitlab/docker-login
 
 nixos-unstable:
-  extends: .build
+  stage: build
+  script: nix-shell --run ./.gitlab-ci.sh
   variables:
-    NIXPKGS_CHANNEL: nixos-unstable
+    NIX_PATH: nixpkgs=channel:nixos-unstable
     IMAGE_TAG: latest
 
 nixos-18.09:
-  extends: .build
-  variables:
-    NIXPKGS_CHANNEL: nixos-18.09
-    IMAGE_TAG: nixos-18.09
-
-# ---- templates ---
-
-.build:
   stage: build
-  script:
-    - nix-shell --run ./build
-    - nix-shell --run .gitlab/push-master
+  script: nix-shell --run ./.gitlab-ci.sh
   variables:
-    NIX_PATH: "nixpkgs=channel:${NIXPKGS_CHANNEL}"
-    REGISTRY_URL: "${CI_REGISTRY_IMAGE}"
-
+    NIX_PATH: nixpkgs=channel:nixos-18.09
+    IMAGE_TAG: nixos-18.09

@@ -1,6 +1,8 @@
-#!/bin/sh -eu
+#!/usr/bin/env bash
+set -euo pipefail
 
 # build *all* the docker images
-nix-build release.nix \
+exec nix-build release.nix \
   --no-out-link \
+  --option sandbox true \
   "$@"
