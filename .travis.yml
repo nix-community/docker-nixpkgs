@@ -1,0 +1,13 @@
+language: nix
+
+nix: 2.2.1
+
+matrix:
+  include:
+  - name: nixos-unstable
+    env: NIX_PATH=nixpkgs=channel:nixos-unstable IMAGE_TAG=latest
+  - name: nixos-18.09
+    env: NIX_PATH=nixpkgs=channel:nixos-18.09 IMAGE_TAG=nixos-18.09
+
+script:
+  - nix-shell --run ./.travis.sh
