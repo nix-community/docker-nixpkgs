@@ -36,6 +36,7 @@ $ docker run -ti --rm registry.gitlab.com/zimbatm/docker-nixpkgs/curl http://ifc
 | Image           | Description           |
 | ---             | ---                   |
 | curl            | CLI only              |
+| docker-compose  | CLI only              |
 | kubectl         | CLI only              |
 | kubernetes-helm | CLI only              |
 | nix             | nix with deps         |
