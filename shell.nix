@@ -5,4 +5,9 @@ mkShell {
     jq
     skopeo
   ];
+
+  shellHook = ''
+    # try to work aroud build issues
+    unset TMPDIR
+  '';
 }
