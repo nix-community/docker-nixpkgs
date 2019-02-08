@@ -1,4 +1,7 @@
 _: pkgs: {
+  # lib stuff can be in the top-level
+  buildCLIImage = pkgs.callPackage ./lib/buildCLIImage.nix {};
+
   # docker images must be lower-cased
   docker-nixpkgs = rec {
 
