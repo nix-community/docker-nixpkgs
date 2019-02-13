@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 #
-# Usage: ./push-all <registry-prefix> <image-tag>
+# Usage: ./push-all <registry> <image-prefix> <image-tag>
 set -euo pipefail
 
-registry_prefix=${1:-nixpkgs}
-image_tag=${2:-latest}
+registry=${1:-docker.io}
+image_prefix=${2:-nixpkgs}
+image_tag=${3:-latest}
 
 releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+
+echo "=== Pushing images to $registry"
 
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   file=$(echo "$releases_json" | jq -r ".\"$attr\"")
   echo "--- $attr -> $file"
-  skopeo copy "docker-archive://$file" "docker://$registry_prefix/$attr:$image_tag"
+  skopeo copy "docker-archive://$file" "docker://$registry/$image_prefix/$attr:$image_tag"
 done
+
+echo OK

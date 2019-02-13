@@ -2,12 +2,18 @@
 #
 # A simplified docker login approach that doesn't depends on the docker binary
 #
-# Usage: ./docker-login <registry> <username> <password>
+# Usage: ./docker-login <username> <password> [registry]
 set -euo pipefail
 
-registry=$1
-username=$2
-password=$3
+username=$1
+password=$2
+registry=${3:-docker.io}
+
+# Encode some funky docker heuristic
+if [[ $registry = *docker.io ]]; then
+  # use the v2 registry so that skopeo can do noop layer copies
+  registry=https://index.docker.io/v2/
+fi
 
 mkdir ~/.docker
 

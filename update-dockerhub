@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# Update docker hub image descriptions. The API is not documented and might
+# break in the future.
+#
+# Usage: ./update-dockerhub <user> <password> [org]
+set -euo pipefail
+
+username=$1
+password=$2
+org=${3:-nixpkgs}
+user=$username:$password
+
+releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+
+to_json() {
+  local desc=$1 full_desc=$2
+  jq -n \
+    --arg desc "$desc" \
+    --arg full_desc "$full_desc" \
+    '.description=$desc | .full_description=$full_desc'
+}
+
+echo "=== Updating Docker Hub project descriptions"
+
+for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
+  echo "--- $attr"
+  desc="$attr is automatically built from nix-community/docker-nixpkgs"
+
+  if [[ -f "$attr/README.md" ]]; then
+    full_desc=$(< "$attr/README.md")
+  else
+    full_desc=$(< "README.md")
+  fi
+
+  data=$(to_json "$desc" "$full_desc")
+  echo "data: $data"
+  url=https://cloud.docker.com/v2/repositories/$org/$attr/
+
+  curl -XPATCH -H "Content-Type: application/json" --user "$user" --data "$data" "$url"
+done
+
+echo OK
