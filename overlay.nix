@@ -5,6 +5,7 @@ _: pkgs: {
   # docker images must be lower-cased
   docker-nixpkgs = rec {
 
+    bash = pkgs.callPackage ./bash {};
     curl = pkgs.callPackage ./curl {};
     docker-compose = pkgs.callPackage ./docker-compose {
       docker-compose =

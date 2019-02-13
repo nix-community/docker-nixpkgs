@@ -33,6 +33,7 @@ $ docker run -ti --rm nixpkgs/curl http://ifconfig.co
 
 | Image           | Description           |
 | ---             | ---                   |
+| bash            | CLI only              |
 | curl            | CLI only              |
 | docker-compose  | CLI only              |
 | kubectl         | CLI only              |
