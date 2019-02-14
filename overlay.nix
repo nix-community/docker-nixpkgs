@@ -6,6 +6,7 @@ _: pkgs: {
   docker-nixpkgs = rec {
 
     bash = pkgs.callPackage ./bash {};
+    busybox = pkgs.callPackage ./busybox {};
     curl = pkgs.callPackage ./curl {};
     docker-compose = pkgs.callPackage ./docker-compose {
       docker-compose =
