@@ -23,5 +23,9 @@ dockerTools.buildLayeredImage {
       "PATH=/bin"
       "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
     ];
+    Labels = {
+      "org.label-schema.vcs-ref" = "master";
+      "org.label-schema.vcs-url" = "https://github.com/nix-community/docker-nixpkgs";
+    };
   };
 }
