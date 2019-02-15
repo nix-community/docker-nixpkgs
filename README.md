@@ -13,9 +13,9 @@ Always keep your docker images fresh!
 
 Nix has a number of advantages over Dockerfile when producing docker images:
 
-* builds are actually reproducible
-* Nix will only rebuild the minimum set of changes
-* Nix can produce automatic optimised layers for you
+* builds are more likely to be repeatable and binary reproducible
+* Nix will only rebuild the minimum set of changes with no manual intervention
+* Nix produces optimised layers with no manual intervention
 * nixpkgs provides automatic security updates
 
 ## Example usage
@@ -25,11 +25,14 @@ image to image.
 
 ```
 # run the curl image which has curl as an entry-point
-$ docker run -ti --rm nixpkgs/curl http://ifconfig.co
+$ docker run -ti --rm nixpkgs/curl curl http://ifconfig.co
 180.52.248.114
 ```
 
 ## List of images
+
+Here is the current list of images that are provided. Missing one?
+[Submit a request](https://github.com/nix-community/docker-nixpkgs/issues/new)
 
 | Image           | Description           |
 | ---             | ---                   |
@@ -44,10 +47,22 @@ $ docker run -ti --rm nixpkgs/curl http://ifconfig.co
 
 ## Channels
 
-| Name           | Description                |
-| ---            | ---                        |
-| nixos-unstable | the :latest version        |
-| nixos-18.09    | automatic security updates |
+Each image is built with the following nixpkgs channels and map to the
+following image tag.
+
+The version of the packages included in each image depends on what version the
+nixpkgs channel describes.
+
+| Channel        | Image Tag   | Description                                       |
+| ---            | ---         | ---                                               |
+| nixos-unstable | latest      | latest and greated, major versions might change   |
+| nixos-18.09    | nixos-18.09 | only minor versions that include security updates |
+
+## Related projects
+
+The [docker-library](https://github.com/docker-library/official-images#readme)
+is an image set maintained by the Docker Inc. team and contain
+officially-supported images.
 
 ## License
 
