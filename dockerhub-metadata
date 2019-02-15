@@ -3,7 +3,7 @@
 # Update docker hub image descriptions. The API is not documented and might
 # break in the future.
 #
-# Usage: ./update-dockerhub <user> <password> [org]
+# Usage: ./dockerhub-metadata <user> <password> [org]
 set -euo pipefail
 
 username=$1

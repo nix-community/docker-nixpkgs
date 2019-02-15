@@ -19,7 +19,7 @@ if [[ "$CI_COMMIT_REF_NAME" = master ]]; then
   ./docker-login "$REGISTRY_USER" "$REGISTRY_PASSWORD" "$REGISTRY"
   ./push-all "$REGISTRY" "$IMAGE_PREFIX" "$IMAGE_TAG"
   if [[ $REGISTRY = *docker.io ]]; then
-    ./update-docker-hub "$REGISTRY_USER" "$REGISTRY_PASSWORD" "$IMAGE_PREFIX"
+    ./dockerhub-metadata "$REGISTRY_USER" "$REGISTRY_PASSWORD" "$IMAGE_PREFIX"
   fi
 else
   echo "=== not pushing on non-master ==="

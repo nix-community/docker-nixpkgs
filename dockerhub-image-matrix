@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Usage: ./dockerhub-image-matrix
+set -euo pipefail
+
+microbadge() {
+  local name=$1
+  local tag=${2:-latest}
+
+  if [[ $tag != latest ]]; then
+    name=$name:$tag
+  fi
+
+  # make sure that microbadger has loaded the image
+  curl -o /dev/null -sfL "https://microbadger.com/images/$name"
+
+  echo "![](https://images.microbadger.com/badges/image/$name.svg)"
+}
+
+## Main ##
+
+releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+
+echo "| Image / Tag | latest | nixos-18.09 |"
+echo "| ---         | ---    | ---         |"
+
+for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
+  name=nixpkgs/$attr
+  echo "| [$name](https://hub.docker.com/r/$name) | $(microbadge "$name") | $(microbadge "$name" "nixos-18.09") |"
+done
