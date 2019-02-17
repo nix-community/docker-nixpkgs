@@ -18,7 +18,9 @@ _: pkgs: {
     kubectl = pkgs.callPackage ./kubectl {};
     kubernetes-helm = pkgs.callPackage ./kubernetes-helm {};
     nix = pkgs.callPackage ./nix {};
-    nix-unstable = nix.overrideAttrs (self: { nix = pkgs.nixUnstable; });
+    nix-unstable = nix.override {
+      nix = pkgs.nixUnstable;
+    };
 
   };
 }

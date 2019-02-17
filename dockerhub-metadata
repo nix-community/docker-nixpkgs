@@ -11,7 +11,11 @@ password=$2
 org=${3:-nixpkgs}
 user=$username:$password
 
-releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+nix_eval() {
+  nix-instantiate --strict --eval --json "$@"
+}
+
+releases_json=$(nix_eval release.nix)
 
 to_json() {
   local desc=$1 full_desc=$2
@@ -25,7 +29,7 @@ echo "=== Updating Docker Hub project descriptions"
 
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   echo "--- $attr"
-  desc="$attr is automatically built from nix-community/docker-nixpkgs"
+  desc=$(nix_eval ./release.nix -A "$attr.meta.description" | jq -r .)
 
   if [[ -f "$attr/README.md" ]]; then
     full_desc=$(< "$attr/README.md")
