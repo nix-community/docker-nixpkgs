@@ -1,4 +1,4 @@
-{ channel ? "nixos-unstable" }@args:
+{ nixpkgs ? <nixpkgs> }@args:
 with import ./. args;
 mkShell {
   buildInputs = [
