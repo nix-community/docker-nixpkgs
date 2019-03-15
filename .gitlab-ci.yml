@@ -16,3 +16,10 @@ nixos-18.09:
   variables:
     NIX_PATH: nixpkgs=channel:nixos-18.09
     IMAGE_TAG: nixos-18.09
+
+nixos-19.03:
+  stage: build
+  script: nix-shell --run ./.gitlab-ci.sh
+  variables:
+    NIX_PATH: nixpkgs=channel:nixos-19.03
+    IMAGE_TAG: nixos-19.03

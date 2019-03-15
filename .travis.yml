@@ -8,6 +8,8 @@ matrix:
     env: NIX_PATH=nixpkgs=channel:nixos-unstable IMAGE_TAG=latest
   - name: nixos-18.09
     env: NIX_PATH=nixpkgs=channel:nixos-18.09 IMAGE_TAG=nixos-18.09
+  - name: nixos-19.03
+    env: NIX_PATH=nixpkgs=channel:nixos-19.03 IMAGE_TAG=nixos-19.03
 
 script:
   - nix-shell --run ./.travis.sh
