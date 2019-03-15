@@ -12,7 +12,7 @@ _: pkgs: {
       docker-compose =
          # master
          pkgs.docker-compose or
-         # 18.09
+         # 18.09 or later
          pkgs.python3Packages.docker_compose;
     };
     kubectl = pkgs.callPackage ./kubectl {};
