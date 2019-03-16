@@ -11,10 +11,12 @@ microbadge() {
     name=$name:$tag
   fi
 
-  # make sure that microbadger has loaded the image
-  curl -o /dev/null -sfL "https://microbadger.com/images/$name"
+  local homepage=https://microbadger.com/images/$name
 
-  echo "![](https://images.microbadger.com/badges/image/$name.svg)"
+  # make sure that microbadger has loaded the image
+  curl -o /dev/null -sfL "$homepage"
+
+  echo "[![](https://images.microbadger.com/badges/image/$name.svg)]($homepage)"
 }
 
 ## Main ##
