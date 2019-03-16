@@ -77,17 +77,6 @@ All images are automatically built and pushed to Docker Hub.
 | [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-18.09.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-19.03.svg) |
 | [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-18.09.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-19.03.svg) |
 <!-- END mdsh -->
-| Image / Tag | latest | nixos-18.09 |
-| ---         | ---    | ---         |
-| [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash) | ![](https://images.microbadger.com/badges/image/nixpkgs/bash.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/bash:nixos-18.09.svg) |
-| [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox) | ![](https://images.microbadger.com/badges/image/nixpkgs/busybox.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/busybox:nixos-18.09.svg) |
-| [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl) | ![](https://images.microbadger.com/badges/image/nixpkgs/curl.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/curl:nixos-18.09.svg) |
-| [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose) | ![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose:nixos-18.09.svg) |
-| [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl) | ![](https://images.microbadger.com/badges/image/nixpkgs/kubectl.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/kubectl:nixos-18.09.svg) |
-| [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm) | ![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm:nixos-18.09.svg) |
-| [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-18.09.svg) |
-| [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-18.09.svg) |
-
 ## Adding new images
 
 To add a new image to the project, create a new folder under
