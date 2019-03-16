@@ -88,6 +88,15 @@ All images are automatically built and pushed to Docker Hub.
 | [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-18.09.svg) |
 | [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg) | ![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-18.09.svg) |
 
+## Adding new images
+
+To add a new image to the project, create a new folder under
+`./images/<image-name>` with a default.nix that returns the docker image.
+
+Then run `nix-build release.nix -A <image-name>` to test that it builds, and
+then use
+`docker load -i /nix/store/...<image-name>.tar.gz` to load and test the image.
+
 ## Related projects
 
 The [docker-library](https://github.com/docker-library/official-images#readme)
