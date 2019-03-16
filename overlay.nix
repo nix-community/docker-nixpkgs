@@ -3,7 +3,7 @@ _: pkgs: {
   buildCLIImage = pkgs.callPackage ./lib/buildCLIImage.nix {};
 
   # docker images must be lower-cased
-  docker-nixpkgs = rec {
+  docker-nixpkgs = {
 
     bash = pkgs.callPackage ./bash {};
     busybox = pkgs.callPackage ./busybox {};
@@ -12,9 +12,7 @@ _: pkgs: {
     kubectl = pkgs.callPackage ./kubectl {};
     kubernetes-helm = pkgs.callPackage ./kubernetes-helm {};
     nix = pkgs.callPackage ./nix {};
-    nix-unstable = nix.override {
-      nix = pkgs.nixUnstable;
-    };
+    nix-unstable = pkgs.callPackage ./nix-unstable {};
 
   };
 }
