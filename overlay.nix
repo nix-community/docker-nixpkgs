@@ -8,13 +8,7 @@ _: pkgs: {
     bash = pkgs.callPackage ./bash {};
     busybox = pkgs.callPackage ./busybox {};
     curl = pkgs.callPackage ./curl {};
-    docker-compose = pkgs.callPackage ./docker-compose {
-      docker-compose =
-         # master
-         pkgs.docker-compose or
-         # 18.09 or later
-         pkgs.python3Packages.docker_compose;
-    };
+    docker-compose = pkgs.callPackage ./docker-compose {};
     kubectl = pkgs.callPackage ./kubectl {};
     kubernetes-helm = pkgs.callPackage ./kubernetes-helm {};
     nix = pkgs.callPackage ./nix {};
