@@ -5,14 +5,14 @@ _: pkgs: {
   # docker images must be lower-cased
   docker-nixpkgs = {
 
-    bash = pkgs.callPackage ./bash {};
-    busybox = pkgs.callPackage ./busybox {};
-    curl = pkgs.callPackage ./curl {};
-    docker-compose = pkgs.callPackage ./docker-compose {};
-    kubectl = pkgs.callPackage ./kubectl {};
-    kubernetes-helm = pkgs.callPackage ./kubernetes-helm {};
-    nix = pkgs.callPackage ./nix {};
-    nix-unstable = pkgs.callPackage ./nix-unstable {};
+    bash = pkgs.callPackage ./images/bash {};
+    busybox = pkgs.callPackage ./images/busybox {};
+    curl = pkgs.callPackage ./images/curl {};
+    docker-compose = pkgs.callPackage ./images/docker-compose {};
+    kubectl = pkgs.callPackage ./images/kubectl {};
+    kubernetes-helm = pkgs.callPackage ./images/kubernetes-helm {};
+    nix = pkgs.callPackage ./images/nix {};
+    nix-unstable = pkgs.callPackage ./images/nix-unstable {};
 
   };
 }
