@@ -42,6 +42,7 @@ Here is the current list of images that are provided. Missing one? Send an
 | docker-compose  | CLI only              |
 | kubectl         | CLI only              |
 | kubernetes-helm | CLI only              |
+| nginx           | CLI only              |
 | nix             | nix with deps         |
 | nix-unstable    | nixUnstable with deps |
 
@@ -57,6 +58,7 @@ nixpkgs channel describes.
 | ---            | ---         | ---                                               |
 | nixos-unstable | latest      | latest and greated, major versions might change   |
 | nixos-18.09    | nixos-18.09 | only minor versions that include security updates |
+| nixos-19.03    | nixos-19.03 | only minor versions that include security updates |
 
 ## Docker Hub
 
@@ -78,6 +80,7 @@ All images are automatically built and pushed to Docker Hub.
 | [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg)](https://microbadger.com/images/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-18.09.svg)](https://microbadger.com/images/nixpkgs/nix:nixos-18.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-19.03.svg)](https://microbadger.com/images/nixpkgs/nix:nixos-19.03) |
 | [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg)](https://microbadger.com/images/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-18.09.svg)](https://microbadger.com/images/nixpkgs/nix-unstable:nixos-18.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-19.03.svg)](https://microbadger.com/images/nixpkgs/nix-unstable:nixos-19.03) |
 <!-- END mdsh -->
+
 ## Adding new images
 
 To add a new image to the project, create a new folder under
