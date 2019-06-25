@@ -37,6 +37,7 @@ Here is the current list of images that are provided. Missing one? Send an
 | Image           | Description           |
 | ---             | ---                   |
 | bash            | CLI only              |
+| couchpotato     | CLI only              |
 | busybox         | CLI only              |
 | curl            | CLI only              |
 | docker-compose  | CLI only              |
