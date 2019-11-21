@@ -23,10 +23,10 @@ microbadge() {
 
 releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
 
-echo "| Image / Tag | latest | nixos-18.09 | nixos-19.03 |"
+echo "| Image / Tag | latest | nixos-19.03 | nixos-19.09 |"
 echo "| ---         | ---    | ---         | ---         |"
 
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   name=nixpkgs/$attr
-  echo "| [$name](https://hub.docker.com/r/$name) | $(microbadge "$name") | $(microbadge "$name" "nixos-18.09") | $(microbadge "$name" "nixos-19.03") |"
+  echo "| [$name](https://hub.docker.com/r/$name) | $(microbadge "$name") | $(microbadge "$name" "nixos-19.03") | $(microbadge "$name" "nixos-19.09") |"
 done
