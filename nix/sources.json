@@ -1,0 +1,13 @@
+{
+    "nix-container-images": {
+        "url": "https://github.com/cloudwatt/nix-container-images/archive/cf1dbb827946b22a36d0eeb64a0e062d5e7cba53.tar.gz",
+        "owner": "cloudwatt",
+        "branch": "master",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
+        "repo": "nix-container-images",
+        "type": "tarball",
+        "sha256": "0svfqzp91qrx82w5wy0ax8vx54mqa1hgipbb1jbd96wqxhbxwgsl",
+        "description": "Write container images as NixOS machines",
+        "rev": "cf1dbb827946b22a36d0eeb64a0e062d5e7cba53"
+    }
+}
