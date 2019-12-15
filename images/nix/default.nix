@@ -60,7 +60,7 @@ let
       Cmd = [ "/bin/bash" ];
       Env = [
         "ENV=/etc/profile.d/nix.sh"
-        "NIX_PATH=nixpkgs=channel:nixpkgs-unstable"
+        "NIX_PATH=nixpkgs=${toString <nixpkgs>}"
         "PAGER=cat"
         "PATH=/usr/bin:/bin"
         "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
