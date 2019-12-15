@@ -1,9 +1,9 @@
 { dockerTools
-, bash
+, bashInteractive
 , cacert
 , coreutils
 , curl
-, gitMinimal
+, git
 , gnutar
 , gzip
 , iana-etc
@@ -11,6 +11,17 @@
 , xz
 }:
 let
+  # gitMinimal still ships with perl and python
+  gitReallyMinimal = (git.override {
+      perlSupport = false;
+      pythonSupport = false;
+      withManual = false;
+      withpcre2 = false;
+    }).overrideAttrs(_:{
+      # installCheck is broken when perl is disabled
+      doInstallCheck=false;
+    });
+
   image = dockerTools.buildImageWithNixDb {
     inherit (nix) name;
 
@@ -18,12 +29,12 @@ let
       ./root
       coreutils
       # add /bin/sh
-      bash
+      bashInteractive
       nix
 
       # runtime dependencies of nix
       cacert
-      gitMinimal
+      gitReallyMinimal
       gnutar
       gzip
       xz
