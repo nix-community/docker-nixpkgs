@@ -1,5 +1,4 @@
-{ nixpkgs ? <nixpkgs> }@args:
-with import ./. args;
+with import ./.;
 mkShell {
   buildInputs = [
     jq

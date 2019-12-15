@@ -1,4 +1,4 @@
 let
-  pkgs = import ./. {};
+  pkgs = import ./.;
 in
 pkgs.docker-nixpkgs
