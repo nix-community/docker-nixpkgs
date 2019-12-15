@@ -3,7 +3,7 @@
 , cacert
 }:
 { drv # derivation to build the image for
-# Name of the binary to run by default
+  # Name of the binary to run by default
 , binName ? (builtins.parseDrvName drv.name).name
 , meta ? drv.meta
 }:
@@ -33,4 +33,4 @@ let
     };
   };
 in
-  image // { meta = meta // image.meta; }
+image // { meta = meta // image.meta; }

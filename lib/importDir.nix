@@ -4,9 +4,11 @@ importFn: baseDir:
 let
   dirEntries =
     builtins.attrNames
-      (lib.filterAttrs
-        (k: v: v == "directory")
-        (builtins.readDir baseDir));
+      (
+        lib.filterAttrs
+          (k: v: v == "directory")
+          (builtins.readDir baseDir)
+      );
 
   absDirs =
     builtins.map
@@ -18,4 +20,4 @@ let
       (dir: { name = builtins.baseNameOf dir; value = importFn dir; })
       absDirs;
 in
-  builtins.listToAttrs imports
+builtins.listToAttrs imports

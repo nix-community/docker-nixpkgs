@@ -12,15 +12,19 @@
 }:
 let
   # gitMinimal still ships with perl and python
-  gitReallyMinimal = (git.override {
+  gitReallyMinimal = (
+    git.override {
       perlSupport = false;
       pythonSupport = false;
       withManual = false;
       withpcre2 = false;
-    }).overrideAttrs(_:{
+    }
+  ).overrideAttrs (
+    _: {
       # installCheck is broken when perl is disabled
-      doInstallCheck=false;
-    });
+      doInstallCheck = false;
+    }
+  );
 
   image = dockerTools.buildImageWithNixDb {
     inherit (nix) name;
@@ -64,4 +68,4 @@ let
     };
   };
 in
-  image // { meta = nix.meta // image.meta; }
+image // { meta = nix.meta // image.meta; }
