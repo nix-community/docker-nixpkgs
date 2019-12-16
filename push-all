@@ -13,8 +13,10 @@ echo "=== Pushing images to $registry"
 
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   file=$(echo "$releases_json" | jq -r ".\"$attr\"")
-  echo "--- $attr -> $file"
-  skopeo copy "docker-archive://$file" "docker://$registry/$image_prefix/$attr:$image_tag"
+  src=docker-archive://$file
+  dst=docker://$registry/$image_prefix/$attr:$image_tag
+  echo "--- attr=$attr src=$src dst=$dst"
+  skopeo copy "$src" "$dst"
 done
 
 echo OK
