@@ -7,7 +7,7 @@ registry=${1:-docker.io}
 image_prefix=${2:-nixpkgs}
 image_tag=${3:-latest}
 
-releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+releases_json=$(nix-instantiate --strict --eval --json)
 
 echo "=== Pushing images to $registry"
 

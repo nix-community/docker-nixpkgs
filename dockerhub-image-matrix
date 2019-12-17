@@ -21,7 +21,7 @@ microbadge() {
 
 ## Main ##
 
-releases_json=$(nix-instantiate ./release.nix --strict --eval --json)
+releases_json=$(nix-instantiate --strict --eval --json)
 
 echo "| Image / Tag | latest | nixos-19.03 | nixos-19.09 |"
 echo "| ---         | ---    | ---         | ---         |"

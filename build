@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # build *all* the docker images
-exec nix-build release.nix \
+exec nix-build \
   --no-out-link \
   --option sandbox true \
   "$@"

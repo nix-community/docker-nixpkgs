@@ -1,4 +1,4 @@
-with import ./.;
+with import ./pkgs.nix;
 mkShell {
   buildInputs = [
     jq
