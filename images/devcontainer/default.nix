@@ -5,9 +5,11 @@
 , cacert
 , coreutils
 , curl
+, direnv
 , gcc-unwrapped
 , gitReallyMinimal
 , glibc
+, gnugrep
 , gnutar
 , gzip
 , iana-etc
@@ -44,10 +46,15 @@ let
       # for user management
       shadow
 
+      # more userland tools
+      gnugrep
+      direnv
+
       # for the vscode extension
       gcc-unwrapped
       iproute
       sedutil
+
     ];
   };
 
@@ -73,19 +80,13 @@ let
       # might as well...
       ln -s /nix/var/nix/profiles/default/bin/bash bin/bash
 
+      # setup shadow, bashrc
+      cp -r ${./root/etc} etc
+      chmod +w etc etc/group etc/passwd etc/shadow
+
       # setup iana-etc for haskell binaries
-      mkdir etc
       ln -s /nix/var/nix/profiles/default/etc/protocols etc/protocols
       ln -s /nix/var/nix/profiles/default/etc/services etc/services
-
-      # setup shadow
-      mkdir etc/pam.d
-      cp ${./root/etc/bashrc} etc/bashrc
-      cp ${./root/etc/group} etc/group
-      cp ${./root/etc/passwd} etc/passwd
-      cp ${./root/etc/shadow} etc/shadow
-      cp ${./root/etc/nsswitch.conf} etc/nsswitch.conf
-      cp ${./root/etc/pam.d/other} etc/pam.d/other
 
       # make sure /tmp exists
       mkdir -m 0777 tmp

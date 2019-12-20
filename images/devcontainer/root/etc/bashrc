@@ -3,4 +3,6 @@ if [[ $- == *i* ]]; then
 
 PS1='\[\033[0;32;40m\][nix]$\[\033[0m\] '
 
+# setup direnv
+eval "$(direnv hook bash)"
 fi
