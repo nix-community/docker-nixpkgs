@@ -18,6 +18,7 @@
 , iproute
 , nix
 , openssh
+, sedutil
 , shadow
 , sudo
 , xz
@@ -49,6 +50,7 @@ let
       # for the vscode extension
       gcc-unwrapped
       iproute
+      sedutil
     ];
   };
 
