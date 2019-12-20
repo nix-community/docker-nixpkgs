@@ -16,6 +16,7 @@
 , gzip
 , iana-etc
 , iproute
+, lib
 , nix
 , openssh
 , sedutil
@@ -25,6 +26,8 @@
 , mkUserEnvironment
 }:
 let
+  channel = builtins.getEnv("NIXPKGS_CHANNEL");
+
   # generate a user profile for the image
   profile = mkUserEnvironment {
     derivations = [
@@ -108,11 +111,14 @@ let
         "ENV=/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
         "GIT_SSL_CAINFO=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
         "LD_LIBRARY_PATH=/nix/var/nix/profiles/default/lib"
-        "NIX_PATH=nixpkgs=${toString <nixpkgs>}"
         "PAGER=cat"
         "PATH=/nix/var/nix/profiles/default/bin"
         "SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
-      ];
+      ]
+      ++ lib.optional
+        (channel != "")
+        "NIX_PATH=nixpkgs=channel:${channel}"
+      ;
       Labels = {
         # https://github.com/microscaling/microscaling/blob/55a2d7b91ce7513e07f8b1fd91bbed8df59aed5a/Dockerfile#L22-L33
         "org.label-schema.vcs-ref" = "master";
