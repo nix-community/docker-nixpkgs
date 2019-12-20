@@ -1,8 +1,4 @@
 # A fat and modifiable Nix image
-#
-# TODO: create a suid wrapper for sudo.
-
-# sudo: setrlimit(RLIMIT_CORE): Operation not permitted
 { dockerTools
 , closureInfo
 , bashInteractive
@@ -21,7 +17,6 @@
 , openssh
 , sedutil
 , shadow
-, sudo
 , xz
 , mkUserEnvironment
 }:
@@ -48,7 +43,6 @@ let
 
       # for user management
       shadow
-      sudo
 
       # for the vscode extension
       gcc-unwrapped
