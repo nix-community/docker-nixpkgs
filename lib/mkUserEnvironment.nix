@@ -21,6 +21,9 @@
 # Supporting code
 with builtins;
 let
+  # back-compat
+  isPath = builtins.isPath or (x: builtins.typeOf x == "path");
+
   # Escape Nix strings
   stringEscape = str:
     "\"" + (
