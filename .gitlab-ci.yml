@@ -7,19 +7,17 @@ nixos-unstable:
   stage: build
   script: nix-shell --run ./.gitlab-ci.sh
   variables:
-    NIX_PATH: nixpkgs=channel:nixos-unstable
+    NIXPKGS_CHANNEL: nixos-unstable
     IMAGE_TAG: latest
 
 nixos-19.03:
   stage: build
   script: nix-shell --run ./.gitlab-ci.sh
   variables:
-    NIX_PATH: nixpkgs=channel:nixos-19.03
-    IMAGE_TAG: nixos-19.03
+    NIXPKGS_CHANNEL: nixos-19.03
 
 nixos-19.09:
   stage: build
   script: nix-shell --run ./.gitlab-ci.sh
   variables:
-    NIX_PATH: nixpkgs=channel:nixos-19.09
-    IMAGE_TAG: nixos-19.09
+    NIXPKGS_CHANNEL: nixos-19.09

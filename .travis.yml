@@ -5,11 +5,11 @@ nix: 2.2.1
 matrix:
   include:
   - name: nixos-unstable
-    env: NIX_PATH=nixpkgs=channel:nixos-unstable IMAGE_TAG=latest
+    env: NIXPKGS_CHANNEL=nixos-unstable IMAGE_TAG=latest
   - name: nixos-19.03
-    env: NIX_PATH=nixpkgs=channel:nixos-19.03 IMAGE_TAG=nixos-19.03
+    env: NIXPKGS_CHANNEL=nixos-19.03
   - name: nixos-19.09
-    env: NIX_PATH=nixpkgs=channel:nixos-19.09 IMAGE_TAG=nixos-19.09
+    env: NIXPKGS_CHANNEL=nixos-19.09
 
 script:
   - nix-shell --run ./.travis.sh
