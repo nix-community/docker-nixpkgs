@@ -81,6 +81,7 @@ let
       ln -s /nix/var/nix/profiles/default/bin/bash bin/bash
 
       # setup shadow, bashrc
+      mkdir home
       cp -r ${./root/etc} etc
       chmod +w etc etc/group etc/passwd etc/shadow
 
