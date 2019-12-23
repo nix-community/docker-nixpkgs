@@ -117,6 +117,11 @@ You are invited to contribute new features, fixes or updates, large or small;
 we are always thrilled to receive pull requests, and do our brest ot process
 them as fast as we can.
 
+## Related projects
+
+* [Nixery](https://nixery.dev/) is a pretty cool service that builds docker
+  images from nixpkgs attributes on the fly.
+
 ## License
 
 Copyright (c) 2019 zimbatm and contributors.
