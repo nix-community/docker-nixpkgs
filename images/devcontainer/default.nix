@@ -1,8 +1,8 @@
 # A fat and modifiable Nix image
 { dockerTools
-, closureInfo
 , bashInteractive
 , cacert
+, closureInfo
 , coreutils
 , curl
 , direnv
@@ -10,6 +10,7 @@
 , gitReallyMinimal
 , glibc
 , gnugrep
+, gnused
 , gnutar
 , gzip
 , iana-etc
@@ -18,7 +19,6 @@
 , nix
 , openssh
 , procps
-, sedutil
 , shadow
 , xz
 , mkUserEnvironment
@@ -33,6 +33,7 @@ let
       coreutils
       procps
       gnugrep
+      gnused
 
       # add /bin/sh
       bashInteractive
@@ -54,8 +55,6 @@ let
       # for the vscode extension
       gcc-unwrapped
       iproute
-      sedutil
-
     ];
   };
 
