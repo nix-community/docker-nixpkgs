@@ -17,6 +17,7 @@
 , lib
 , nix
 , openssh
+, procps
 , sedutil
 , shadow
 , xz
@@ -28,7 +29,11 @@ let
   # generate a user profile for the image
   profile = mkUserEnvironment {
     derivations = [
+      # core utils
       coreutils
+      procps
+      gnugrep
+
       # add /bin/sh
       bashInteractive
       nix
@@ -45,10 +50,6 @@ let
 
       # for user management
       shadow
-
-      # more userland tools
-      gnugrep
-      direnv
 
       # for the vscode extension
       gcc-unwrapped
