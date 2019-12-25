@@ -15,6 +15,7 @@
 , gzip
 , iana-etc
 , iproute
+, less
 , lib
 , nix
 , openssh
@@ -34,6 +35,7 @@ let
       procps
       gnugrep
       gnused
+      less
 
       # add /bin/sh
       bashInteractive
@@ -107,7 +109,7 @@ let
         "ENV=/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
         "GIT_SSL_CAINFO=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
         "LD_LIBRARY_PATH=/nix/var/nix/profiles/default/lib"
-        "PAGER=cat"
+        "PAGER=less"
         "PATH=/nix/var/nix/profiles/default/bin"
         "SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
       ]
