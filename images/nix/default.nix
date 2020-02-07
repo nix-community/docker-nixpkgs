@@ -45,6 +45,7 @@ let
       Cmd = [ "/bin/bash" ];
       Env = [
         "ENV=/etc/profile.d/nix.sh"
+        "NIX_BUILD_SHELL=/bin/bash"
         "NIX_PATH=nixpkgs=${toString <nixpkgs>}"
         "PAGER=cat"
         "PATH=/usr/bin:/bin"
