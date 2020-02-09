@@ -6,10 +6,10 @@ matrix:
   include:
   - name: nixos-unstable
     env: NIXPKGS_CHANNEL=nixos-unstable IMAGE_TAG=latest
-  - name: nixos-19.03
-    env: NIXPKGS_CHANNEL=nixos-19.03
   - name: nixos-19.09
     env: NIXPKGS_CHANNEL=nixos-19.09
+  - name: nixos-19.03
+    env: NIXPKGS_CHANNEL=nixos-19.03
 
 script:
   - nix-shell --run ./.travis.sh
