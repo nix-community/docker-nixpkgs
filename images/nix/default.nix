@@ -27,6 +27,7 @@ let
       gitReallyMinimal
       gnutar
       gzip
+      openssh
       xz
 
       # for haskell binaries
