@@ -41,7 +41,7 @@ let
       ln -s ../bin usr/bin
 
       # make sure /tmp exists
-      mkdir -m 0777 tmp
+      mkdir -m 1777 tmp
     '';
 
     config = {
