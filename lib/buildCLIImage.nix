@@ -5,6 +5,7 @@
 { drv # derivation to build the image for
   # Name of the binary to run by default
 , binName ? (builtins.parseDrvName drv.name).name
+, extraContents ? []
 , meta ? drv.meta
 }:
 let
@@ -17,7 +18,7 @@ let
       # most program need TLS certs
       cacert
       drv
-    ];
+    ] ++ extraContents;
 
     config = {
       Cmd = [ "/bin/${binName}" ];
