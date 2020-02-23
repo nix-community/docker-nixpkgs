@@ -8,6 +8,7 @@
 , gzip
 , iana-etc
 , nix
+, openssh
 , xz
 , extraContents ? []
 }:
