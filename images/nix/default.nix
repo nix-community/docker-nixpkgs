@@ -9,6 +9,7 @@
 , iana-etc
 , nix
 , xz
+, extraContents ? []
 }:
 let
   image = dockerTools.buildImageWithNixDb {
@@ -30,7 +31,7 @@ let
 
       # for haskell binaries
       iana-etc
-    ];
+    ] ++ extraContents;
 
     extraCommands = ''
       # for /usr/bin/env
