@@ -53,6 +53,7 @@ let
         "PAGER=cat"
         "PATH=/usr/bin:/bin"
         "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
+        "USER=root"
       ];
     };
   };
