@@ -10,6 +10,7 @@
 , nix
 , openssh
 , xz
+, pkgs
 , extraContents ? []
 }:
 let
@@ -30,6 +31,7 @@ let
       gzip
       openssh
       xz
+      pkgs.path
 
       # for haskell binaries
       iana-etc
@@ -50,7 +52,7 @@ let
         "ENV=/etc/profile.d/nix.sh"
         "BASH_ENV=/etc/profile.d/nix.sh"
         "NIX_BUILD_SHELL=/bin/bash"
-        "NIX_PATH=nixpkgs=${toString <nixpkgs>}"
+        "NIX_PATH=nixpkgs=${pkgs.path}"
         "PAGER=cat"
         "PATH=/usr/bin:/bin"
         "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
