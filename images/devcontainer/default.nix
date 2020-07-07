@@ -112,11 +112,13 @@ let
         "PAGER=less"
         "PATH=/nix/var/nix/profiles/default/bin"
         "SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
-      ]
-      ++ lib.optional
-        (channel != "")
-        "NIX_PATH=nixpkgs=channel:${channel}"
-      ;
+        (
+          if channel != "" then
+            "NIX_PATH=nixpkgs=channel:${channel}"
+          else
+            "NIX_PATH=nixpkgs=${../nix/fake_nixpkgs}"
+        )
+      ];
       Labels = {
         # https://github.com/microscaling/microscaling/blob/55a2d7b91ce7513e07f8b1fd91bbed8df59aed5a/Dockerfile#L22-L33
         "org.label-schema.vcs-ref" = "master";
