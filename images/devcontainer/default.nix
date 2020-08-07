@@ -98,7 +98,7 @@ let
       export USER=nobody
       ${nix}/bin/nix-store --load-db < ${closureInfo { rootPaths = [ profile ]; }}/registration
 
-      # set the user profile
+      # set default profile
       ${profile}/bin/nix-env --profile nix/var/nix/profiles/default --set ${profile}
 
       # minimal
@@ -141,6 +141,27 @@ let
           else
             "NIX_PATH=nixpkgs=${../nix/fake_nixpkgs}"
         )
+      ];
+
+      # commands to run before build of every Dockerfile using this image
+      OnBuild = [
+        # expose USERNAME, USER_UID, USER_GID as build arguments
+        "ARG USERNAME=vscode"
+        "ARG USER_UID=1000"
+        "ARG USER_GID=$USER_UID"
+
+        # add user and group, add user to wheel group
+        "RUN groupadd -f -g $USER_GID $USERNAME && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -G wheel -m $USERNAME"
+
+        # fix permissions of nix store
+        "RUN chown -R $USER_UID:$USER_GID /nix"
+
+        # change user, change workdir and create user profile
+        "USER $USERNAME"
+        "WORKDIR /home/$USERNAME"
+        "RUN nix-env --profile /nix/var/nix/profiles/per-user/$USERNAME/profile -iA"
+        "ENV USER=$USERNAME"
+        "ENV PATH=/usr/bin:/nix/var/nix/profiles/per-user/$USERNAME/profile/bin:/nix/var/nix/profiles/default/bin"
       ];
       Labels = {
         # https://github.com/microscaling/microscaling/blob/55a2d7b91ce7513e07f8b1fd91bbed8df59aed5a/Dockerfile#L22-L33
