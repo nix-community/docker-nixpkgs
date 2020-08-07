@@ -21,6 +21,7 @@
 , openssh
 , procps
 , shadow
+, sudo
 , xz
 , patchelf
 , mkUserEnvironment
@@ -81,6 +82,7 @@ let
 
       # for user management
       shadow
+      sudo
 
       # for the vscode extension
       iproute
@@ -105,6 +107,11 @@ let
       mkdir -p bin usr/bin
       ln -s /nix/var/nix/profiles/default/bin/sh bin/sh
       ln -s /nix/var/nix/profiles/default/bin/env usr/bin/env
+
+      # install sudo
+      mkdir -p usr/bin usr/lib/sudo
+      cp ${sudo}/bin/sudo usr/bin/sudo
+      cp -r ${sudo}/libexec/sudo/* usr/lib/sudo
 
       # might as well...
       ln -s /nix/var/nix/profiles/default/bin/bash bin/bash
@@ -133,7 +140,7 @@ let
         "ENV=/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
         "GIT_SSL_CAINFO=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
         "PAGER=less"
-        "PATH=/nix/var/nix/profiles/default/bin"
+        "PATH=/usr/bin:/nix/var/nix/profiles/default/bin"
         "SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
         (
           if channel != "" then
@@ -145,6 +152,9 @@ let
 
       # commands to run before build of every Dockerfile using this image
       OnBuild = [
+        # fix permissions of sudo and set suid bit
+        "RUN chmod -R u+s,u+rx,g+x,o+x /usr/bin/sudo && chown -R root:root /usr/lib/sudo"
+
         # expose USERNAME, USER_UID, USER_GID as build arguments
         "ARG USERNAME=vscode"
         "ARG USER_UID=1000"
