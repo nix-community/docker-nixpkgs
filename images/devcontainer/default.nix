@@ -1,12 +1,12 @@
 # A fat and modifiable Nix image
-{ dockerTools
+{ stdenv
+, dockerTools
 , bashInteractive
 , cacert
 , closureInfo
 , coreutils
 , curl
 , direnv
-, gcc-unwrapped
 , gitReallyMinimal
 , glibc
 , gnugrep
@@ -22,14 +22,42 @@
 , procps
 , shadow
 , xz
+, patchelf
 , mkUserEnvironment
+, writeScriptBin
 }:
 let
   channel = builtins.getEnv("NIXPKGS_CHANNEL");
 
+  /**
+    This entrypoint patches node binary copied by vscode. This always succeeds
+    as vscode is always slower to run node, as our entrypoint to patch it.
+
+    This solution is prefered to LD_LIBRARY_PATH, as setting LD_LIBRARY_PATH
+    globally messes environment, as libraries found this way will always have
+    priority. Only other other alternative i can think of to patch node is to
+    have a LD_PRELOAD set with that returns the right libraries, but that
+    solution even if it is more clean can present more runtime issues.
+  **/
+  entrypoint = writeScriptBin "entrypoint.sh" ''
+    #!${bashInteractive}/bin/bash -e
+
+    until ${patchelf}/bin/patchelf \
+      --set-rpath "${stdenv.cc.cc.lib}/lib" \
+      --set-interpreter "${glibc}/lib64/ld-linux-x86-64.so.2" \
+      $HOME/.vscode-server/bin/*/node 2>/dev/null; do true; done
+
+    echo "vscode server binaries successfully patched"
+
+    "$@"
+  '';
+
   # generate a user profile for the image
   profile = mkUserEnvironment {
     derivations = [
+      # container entrypoint
+      entrypoint
+
       # core utils
       coreutils
       procps
@@ -55,7 +83,6 @@ let
       shadow
 
       # for the vscode extension
-      gcc-unwrapped
       iproute
     ];
   };
@@ -94,21 +121,17 @@ let
       # make sure /tmp exists
       mkdir -m 0777 tmp
 
-      # allow ubuntu ELF binaries to run. VSCode copies it's own.
-      mkdir -p lib64
-      ln -s ${glibc}/lib64/ld-linux-x86-64.so.2 lib64/ld-linux-x86-64.so.2
-
       # VSCode assumes that /sbin/ip exists
       mkdir sbin
       ln -s /nix/var/nix/profiles/default/bin/ip sbin/ip
     '';
 
     config = {
-      Cmd = [ "/nix/var/nix/profiles/default/bin/bash" ];
+      Entrypoint = [ "/nix/var/nix/profiles/default/bin/entrypoint.sh" ];
+      Cmd = [ "sleep" "infinity" ];
       Env = [
         "ENV=/nix/var/nix/profiles/default/etc/profile.d/nix.sh"
         "GIT_SSL_CAINFO=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
-        "LD_LIBRARY_PATH=/nix/var/nix/profiles/default/lib"
         "PAGER=less"
         "PATH=/nix/var/nix/profiles/default/bin"
         "SSL_CERT_FILE=/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
