@@ -1,0 +1,5 @@
+set -xeuo pipefail
+nix-build -A image
+id=$(sudo docker load -i result | rg "Loaded image: (.*)" -or '$1')
+sudo docker run -it "$id"
+

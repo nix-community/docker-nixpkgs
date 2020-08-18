@@ -1,4 +1,4 @@
-_:
+{}:
 throw ''
 This container doesn't include nixpkgs.
 
