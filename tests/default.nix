@@ -7,5 +7,9 @@ let
   pkgs = import nixpkgs {};
 in pkgs.buildEnv {
   name = "env";
-  paths = [ pkgs.hello ];
+  paths = [
+    pkgs.hello
+    pkgs.bashInteractive
+    pkgs.coreutils
+  ];
 }

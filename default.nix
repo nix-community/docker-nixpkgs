@@ -9,10 +9,10 @@ in {
   };
 
   inherit (pkgs) docker-nixpkgs;
+  inherit pkgs;
   image = pkgs.callPackage ./image.nix {
     nixpkgs = sources.nixpkgs;
   };
-  empty = pkgs.callPackage ./empty.nix {};
 }
 #
 #  pkgs = import 
