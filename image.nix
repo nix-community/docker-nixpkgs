@@ -18,14 +18,44 @@
 let
 
   exportProfile = pkgs.writeShellScriptBin "export-profile" ''
-    set -xe
-    profile=''${1:-~/.nix-profile}
-    profile=$(realpath "$profile")
-    root=''${2:-/root}
+    set -e
+    root=$1
+    # Same default profile as nix-env
+    profile=$(realpath ''${NIX_PROFILE:-~/.nix-profile})
 
+    if [[ -z "$1" ]]; then
+      echo "Usage: export-profile [ROOTDIR]" >&2
+      echo "  exports everything installed with nix-env to the given directory," >&2
+      echo "  suitable as the root of the next stage in a multi-stage build." >&2
+      exit 1
+    elif [[ -e "$root" ]]; then
+      echo "The directory given to export-profile needs to not exist already" >&2
+      exit 1
+    fi
+
+    # Copy the profile directory to the new root, such that all the profiles
+    # binaries in $profile/bin/* will be available as /bin/* in the new root
+    #
+    # Note that cp -Ls is used to replicate the directory structure of the
+    # profile but use symlinks to point back to the files in the Nix store
+    # This for one avoids the problem of Docker overriding /etc when starting
+    echo "Copying $profile to $root" >&2
+    mkdir -p "$(dirname "$root")"
+    cp -R -Ls "$profile" "$root"
+
+    # Remove the env manifest file as we don't need it
+    rm "$root"/manifest.nix
+
+    # We also need the profiles closure in the new root for all symlinks to be valid
+    echo "Copying all the profiles Nix dependencies to $root" >&2
     nix-store --export $(nix-store -qR "$profile") | \
-      NIX_REMOTE=local?root="$root" nix-store --import
-    ln -s -t "$root" "$profile"/*
+      NIX_REMOTE=local?root="$root" nix-store --import >/dev/null
+
+    # nix-store --import also creates /nix/var, but we don't need this as Nix
+    # won't be available in the final stage, so we only need the store
+    rm -rf "$root/nix/var"
+
+    echo "Finished Nix profile export to $root" >&2
   '';
 
   envContents = [
@@ -44,7 +74,11 @@ let
     xz
 
     cachix
-    pkgs.ncdu
+
+    # Some utilities
+    less
+    gnugrep
+    gnused
   ];
 in
 dockerTools.buildImage {
@@ -52,6 +86,8 @@ dockerTools.buildImage {
   tag = nixpkgs.rev;
   contents = envContents;
 
+  # This section is copied from https://github.com/NixOS/nixpkgs/blob/7a100ad9543687d046cfeeb5156dfaa697e1abbd/pkgs/build-support/docker/default.nix#L39-L57
+  # but adjusted to support additional contents
   extraCommands = let
     contents = envContents ++ [
       nixpkgs
@@ -73,9 +109,8 @@ dockerTools.buildImage {
       ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
     done;
 
-    # for /usr/bin/env
-    mkdir usr
-    ln -s ../bin usr/bin
+    mkdir -p usr/bin
+    ln -s ../bin/env usr/bin/env
 
     # make sure /tmp exists
     mkdir -m 1777 tmp
@@ -83,14 +118,17 @@ dockerTools.buildImage {
 
   config = {
     Cmd = [ "/bin/bash" ];
+    WorkingDir = "/root";
     Env = [
-      "ENV=/etc/profile.d/nix.sh"
-      "BASH_ENV=/etc/profile.d/nix.sh"
+      # So that nix-shell doesn't fetch its own bash
       "NIX_BUILD_SHELL=/bin/bash"
+      # The image itself pins nixpkgs, expose this for convenience
       "NIX_PATH=nixpkgs=${nixpkgs}"
-      "PAGER=cat"
-      "PATH=/nix/var/nix/profiles/default/bin:/bin/usr/bin:/bin"
-      "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # Make nix-env installs work
+      "PATH=/nix/var/nix/profiles/default/bin:/bin"
+      # Needed for curl and co.
+      "NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
+      # Docker apparently doesn't set this
       "USER=root"
     ];
   };

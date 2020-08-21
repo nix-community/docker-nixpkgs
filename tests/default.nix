@@ -11,5 +11,7 @@ in pkgs.buildEnv {
     pkgs.hello
     pkgs.bashInteractive
     pkgs.coreutils
+    pkgs.curl
+    pkgs.cacert
   ];
 }
