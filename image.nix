@@ -84,6 +84,10 @@ in
 dockerTools.buildImage {
   name = "nixpkgs-${nixpkgs.branch}";
   tag = nixpkgs.rev;
+
+  # TODO: This is pretty nasty: It puts all files of these contents into / directly
+  # Better do something like images/devcontainer, which only installs them into a profile directory,
+  # keeping / clean like on NixOS
   contents = envContents;
 
   # This section is copied from https://github.com/NixOS/nixpkgs/blob/7a100ad9543687d046cfeeb5156dfaa697e1abbd/pkgs/build-support/docker/default.nix#L39-L57
