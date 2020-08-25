@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v10
     - name: Build updater
-      run: nix-build -A updater --argstr version $(git rev-parse @)
+      run: nix-build -A updater
     - name: Run updater
       env:
         REGISTRY_USER: niteo

@@ -18,7 +18,7 @@
 , gnused
 
 , nixpkgs
-, version
+, nixHash
 }:
 let
 
@@ -121,12 +121,12 @@ dockerTools.buildImage {
     mkdir -p usr/bin
     ln -s ../bin/env usr/bin/env
 
+
     # make sure /tmp exists
     mkdir -m 1777 tmp
   '';
 
   config = {
-    Labels.DockerNixpkgsVersion = version;
     Cmd = [ "/bin/bash" ];
     WorkingDir = "/root";
     Env = [
@@ -141,5 +141,7 @@ dockerTools.buildImage {
       # Docker apparently doesn't set this
       "USER=root"
     ];
+  } // lib.optionalAttrs (nixHash != null) {
+    Labels.NixHash = nixHash;
   };
 }
