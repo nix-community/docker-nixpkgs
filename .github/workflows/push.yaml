@@ -1,0 +1,20 @@
+name: Image update
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  image-update:
+    name: Build and push image update
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v10
+    - name: Build updater
+      run: nix-build -A updater
+    - name: Run updater
+      env:
+        REGISTRY_USER: niteo
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      run: result/bin/update
