@@ -1,11 +1,13 @@
 let
-  pkgs = import (import ./sources.nix).nixpkgs {
+  sources = import ./sources.nix;
+  internal = sources {
+    sourcesFile = ./internal.json;
+  };
+  pkgs = import internal.nixpkgs {
     config = {};
     overlays = [ (import ../overlay.nix) ];
   };
-  sources = import ./sources.nix {
-    sourcesFile = ./nixpkgs-sources.json;
-  };
 in {
-  inherit pkgs sources;
+  inherit pkgs;
+  sources = removeAttrs sources [ "__functor" ];
 }

@@ -1,5 +1,5 @@
 {
-    "nixos-20.03": {
+    "nixpkgs": {
         "branch": "nixos-20.03",
         "description": "Nix Packages collection",
         "homepage": null,

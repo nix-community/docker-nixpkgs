@@ -4,8 +4,7 @@ on:
     # Every hour
     - cron: '0 * * * *'
 
-  # Allow triggering manually, see
-  # https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event
+  # Allow triggering manually
   workflow_dispatch:
 
 jobs:
@@ -20,16 +19,20 @@ jobs:
         # to trigger another workflow
         persist-credentials: false
     - uses: cachix/install-nix-action@v10
-    - name: Enter nix-shell
+    - name: Entering nix-shell
       run: nix-shell --run "echo entered"
     - name: Run niv update
-      run: nix-shell --run "niv -s nix/nixpkgs-sources.json update"
+      run: nix-shell --run "niv update"
     - name: Commit updates
       run: |
-        if ! git diff-files --quiet; then
+        git status
+        if ! git diff-files; then
+          echo "Changes detected, committing them"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Automatic niv update" -a
+        else
+          echo "No changes detected"
         fi
     - name: Push changes
       uses: ad-m/github-push-action@v0.6.0

@@ -20,11 +20,8 @@ let
   ) sources;
 
 in {
-  # TODO: direnv
   devShell = pkgs.mkShell {
-    buildInputs = [
-      pkgs.niv
-    ];
+    buildInputs = [ pkgs.niv ];
   };
-  inherit updater pkgs sources images;
+  inherit pkgs sources updater images;
 }
