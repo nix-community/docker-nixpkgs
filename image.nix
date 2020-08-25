@@ -14,6 +14,9 @@
 , shadow
 , pkgs
 , lib
+, less
+, gnugrep
+, gnused
 }:
 let
 
@@ -82,8 +85,7 @@ let
   ];
 in
 dockerTools.buildImage {
-  name = "nixpkgs-${nixpkgs.branch}";
-  tag = nixpkgs.rev;
+  name = "nixpkgs";
 
   # TODO: This is pretty nasty: It puts all files of these contents into / directly
   # Better do something like images/devcontainer, which only installs them into a profile directory,

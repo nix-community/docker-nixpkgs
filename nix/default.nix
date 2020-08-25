@@ -5,5 +5,6 @@ let
     overlays = [ (import ../overlay.nix) ];
   };
 in {
-  inherit pkgs sources;
+  inherit pkgs;
+  sources = removeAttrs sources [ "nixpkgs" "__functor" ];
 }

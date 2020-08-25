@@ -1,0 +1,21 @@
+name: Update
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches:
+      - master
+
+jobs:
+  niv-update:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v10
+    - name: Run updater
+      env:
+        REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+      run: |
+        nix-build -A updater
+        REGISTRY_USER=niteo result/bin/update
