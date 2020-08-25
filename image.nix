@@ -1,5 +1,4 @@
-{ nixpkgs
-, dockerTools
+{ dockerTools
 , coreutils
 , bashInteractive
 , nix
@@ -17,6 +16,9 @@
 , less
 , gnugrep
 , gnused
+
+, nixpkgs
+, version
 }:
 let
 
@@ -123,6 +125,7 @@ dockerTools.buildImage {
   '';
 
   config = {
+    Labels.DockerNixpkgsVersion = version;
     Cmd = [ "/bin/bash" ];
     WorkingDir = "/root";
     Env = [
