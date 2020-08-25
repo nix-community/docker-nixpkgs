@@ -1,0 +1,32 @@
+name: Nixpkgs update
+on:
+  schedule:
+    # Every hour
+    - cron: '0 * * * *'
+
+  # Allow triggering manually, see
+  # https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event
+  workflow_dispatch:
+
+jobs:
+  update:
+    name: Update all nixpkgs sources
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.3.2
+    - uses: cachix/install-nix-action@v10
+    - name: Enter nix-shell
+      run: nix-shell --run "echo entered"
+    - name: Run niv update
+      run: nix-shell --run "niv update"
+    - name: Commit updates
+      run: |
+        if ! git diff-files --quiet; then
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Automatic niv update" -a
+        fi
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
