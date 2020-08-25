@@ -1,7 +1,6 @@
 {
-    "nixpkgs": {
+    "nixos-20.03": {
         "branch": "nixos-20.03",
-        "builtin": true,
         "description": "Nix Packages collection",
         "homepage": null,
         "owner": "NixOS",

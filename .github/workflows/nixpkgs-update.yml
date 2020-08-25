@@ -18,7 +18,7 @@ jobs:
     - name: Enter nix-shell
       run: nix-shell --run "echo entered"
     - name: Run niv update
-      run: nix-shell --run "niv update"
+      run: nix-shell --run "niv -s nix/nixpkgs-sources.json update"
     - name: Commit updates
       run: |
         if ! git diff-files --quiet; then
