@@ -88,6 +88,7 @@ let
 in
 dockerTools.buildImage {
   name = "nixpkgs";
+  created = "now";
 
   # TODO: This is pretty nasty: It puts all files of these contents into / directly
   # Better do something like images/devcontainer, which only installs them into a profile directory,
