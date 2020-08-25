@@ -19,6 +19,8 @@ jobs:
         # to trigger another workflow
         persist-credentials: false
     - uses: cachix/install-nix-action@v10
+      with:
+        skip_adding_nixpkgs_channel: true
     - name: Entering nix-shell
       run: nix-shell --run "echo entered"
     - name: Run niv update
