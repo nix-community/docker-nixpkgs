@@ -18,6 +18,8 @@
 , gnused
 
 , nixpkgs
+, attr
+, rev
 , nixHash
 }:
 let
@@ -79,15 +81,11 @@ let
     xz
 
     cachix
-
-    # Some utilities
-    less
-    gnugrep
-    gnused
   ];
 in
 dockerTools.buildImage {
-  name = "nixpkgs";
+  name = "niteo/nixpkgs-${attr}";
+  tag = rev;
   created = "now";
 
   # TODO: This is pretty nasty: It puts all files of these contents into / directly

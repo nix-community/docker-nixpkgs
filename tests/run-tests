@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+TESTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+for dir in "$TESTDIR"/*; do
+	if [[ ! -d "$dir" ]]; then continue; fi
+	attr=$(basename "$dir")
+	echo "Running test for $attr" >&2
+
+	echo "Building the image.." >&2
+	if ! out=$(nix-build "$TESTDIR/.." --no-out-link -A "images.\"$attr\""); then
+		echo "Error building the image" >&2
+		exit 1
+	fi
+	echo "Image built successfully" >&2
+
+	echo "Loading built image into docker.." >&2
+	if ! docker load -i "$out"; then
+		echo "Failed to load the built image into docker" >&2
+		exit 2
+	fi
+	echo "Successfully loaded built image into docker" >&2
+
+	echo "Building test image.." >&2
+	if ! docker build "$dir" -t "test-$attr"; then
+		echo "Failed to build test image" >&2
+		exit 3
+	fi
+	echo "Successfully built test image" >&2
+
+	echo "Running test.." >&2
+	if ! "$dir"/driver docker run "test-$attr"; then
+		echo "Failed to run test" >&2
+		exit 4
+	fi
+	echo "Successfully ran test" >&2
+
+done

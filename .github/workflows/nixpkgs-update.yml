@@ -21,10 +21,10 @@ jobs:
     - uses: cachix/install-nix-action@v10
       with:
         skip_adding_nixpkgs_channel: true
-    - name: Entering nix-shell
-      run: nix-shell --run "echo entered"
-    - name: Run niv update
-      run: nix-shell --run "niv update"
+    - name: Building updater
+      run: nix-build -A nixpkgs-updater
+    - name: Running updater
+      run: result/bin/update
     - name: Commit updates
       run: |
         git status

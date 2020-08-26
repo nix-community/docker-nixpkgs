@@ -1,21 +1,32 @@
-name: Image update
+name: Test & image update
 on:
   push:
     branches:
       - master
 
 jobs:
-  image-update:
-    name: Build and push image update
+  testing:
+    name: Run image tests
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v10
       with:
-       skip_adding_nixpkgs_channel: true
+        skip_adding_nixpkgs_channel: true
+    - name: Run tests
+      run: tests/run-tests
+  image-update:
+    name: Build and push image update
+    runs-on: ubuntu-latest
+    needs: testing
+    steps:
+    - uses: actions/checkout@v2
+    - uses: cachix/install-nix-action@v10
+      with:
+        skip_adding_nixpkgs_channel: true
     - name: Build updater
-      run: nix-build -A updater
-    - name: Run updater
+      run: nix-build -A image-updater
+    - name: Running updater
       env:
         REGISTRY_USER: niteo
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
