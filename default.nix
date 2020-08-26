@@ -22,7 +22,11 @@ let
         config = {};
       };
     in pkgs.callPackage ./image.nix {
-      inherit nixpkgs nixHash;
+      nixpkgs = fetchTarball {
+        name = "nixpkgs-src";
+        inherit (nixpkgs) url sha256;
+      };
+      inherit nixHash;
     }
   ) sources;
 

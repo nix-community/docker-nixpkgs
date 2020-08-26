@@ -1,6 +1,6 @@
 let
   nixpkgs = fetchTarball {
-    name = "nixos-20.03-src";
+    name = "nixpkgs-src";
     url = "https://github.com/NixOS/nixpkgs/archive/14006b724f3d1f25ecf38238ee723d38b0c2f4ce.tar.gz";
     sha256 = "07hfbilyh818pigfn342v2r05n8061wpjaf1m4h291lf6ydjagis";
   };
