@@ -1,7 +1,7 @@
-FROM nixpkgs-nixos-20.03:cb1996818edf506c0d1665ab147c253c558a7426 AS build
+FROM nixpkgs:9nrg98xy3h822fan70x1gk1yjp406wvz AS build
 
 COPY . src
-RUN nix-env -iA "" -f src \
+RUN while ! timeout 5 nix-env -iA "" -f src; do :; done \
 	&& export-profile /dist
 
 FROM scratch

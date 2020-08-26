@@ -13,8 +13,15 @@ let
   '';
 
   images = lib.mapAttrs (attr: nixpkgs:
+    # Allows specifying --argstr nixHash on the CLI
     { nixHash ? null }:
-    pkgs.callPackage ./image.nix {
+    let
+      # All the images dependencies should come from the nixpkgs it's built for
+      pkgs = import nixpkgs {
+        overlays = [ (import ./overlay.nix) ];
+        config = {};
+      };
+    in pkgs.callPackage ./image.nix {
       inherit nixpkgs nixHash;
     }
   ) sources;

@@ -1,8 +1,8 @@
 let
   nixpkgs = fetchTarball {
-    name = "nixpkgs-src";
-    url = "https://github.com/NixOS/nixpkgs/archive/cb1996818edf506c0d1665ab147c253c558a7426.tar.gz";
-    sha256 = "0lb6idvg2aj61nblr41x0ixwbphih2iz8xxc05m69hgsn261hk3j";
+    name = "nixos-20.03-src";
+    url = "https://github.com/NixOS/nixpkgs/archive/14006b724f3d1f25ecf38238ee723d38b0c2f4ce.tar.gz";
+    sha256 = "07hfbilyh818pigfn342v2r05n8061wpjaf1m4h291lf6ydjagis";
   };
   pkgs = import nixpkgs {};
 in pkgs.buildEnv {
