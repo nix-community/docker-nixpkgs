@@ -3,14 +3,11 @@ let
   inherit (import ./nix) pkgs sources;
   inherit (pkgs) lib;
 
-  image-updater = pkgs.writeShellScriptBin "update" ''
-    export PATH=${lib.makeBinPath [ pkgs.skopeo pkgs.jq ]}:$PATH
-    ${lib.concatMapStringsSep "\n" (attr:
-      let nixpkgs = sources.${attr}; in ''
-        ATTR=${attr} TAG=${nixpkgs.rev} ${./image-update}
-      ''
-    ) (lib.attrNames sources)}
-  '';
+  imageUpdater = pkgs.writeShellScriptBin "update" (lib.concatStringsSep "\n"
+    (lib.mapAttrsToList (attr: nixpkgs: ''
+      ATTR=${attr} TAG=${nixpkgs.rev} \
+        ${pkgs.scripts.singleImageUpdater}/bin/update
+    '') sources));
 
   images = lib.mapAttrs (attr: nixpkgs:
     # Allows specifying --argstr nixHash on the CLI
@@ -31,7 +28,7 @@ let
     }
   ) sources;
 
-  nixpkgs-updater = pkgs.writeShellScriptBin "update" ''
+  nixpkgsUpdater = pkgs.writeShellScriptBin "update" ''
     export PATH=${lib.makeBinPath [ pkgs.niv pkgs.gnused pkgs.jq ]}:$PATH
 
     echo "Updating niv nixpkgs sources.." >&2
@@ -42,14 +39,17 @@ let
   '';
 
 in {
-  devShell = pkgs.mkShell {
-    buildInputs = [
-      pkgs.niv
-      pkgs.jq
-      pkgs.gnused
-    ];
-  };
-  inherit pkgs sources image-updater images nixpkgs-updater;
+  # For debugging/introspection
+  inherit pkgs sources;
 
-  tests = import ./tests { inherit pkgs; };
+  # For building the images
+  inherit images;
+
+  # Updaters for CI
+  inherit nixpkgsUpdater imageUpdater;
+
+  # Needed if adding a new channel
+  devShell = pkgs.mkShell {
+    buildInputs = [ pkgs.niv ];
+  };
 }

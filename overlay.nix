@@ -2,8 +2,10 @@ _: pkgs: let
   importDir = import ./lib/importDir.nix {
     inherit (pkgs) lib;
   };
-in
-{
+in {
+
+  scripts = pkgs.callPackage ./scripts {};
+
   # builder stuff can be in the top-level
   buildCLIImage = pkgs.callPackage ./lib/buildCLIImage.nix {};
 
