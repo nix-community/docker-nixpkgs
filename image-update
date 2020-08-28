@@ -16,8 +16,8 @@ echo "Checking whether the image needs to be updated.." >&2
 
 echo "Calculating wanted image nix hash by instantiating the image derivation.." >&2
 if ! drv=$(nix-instantiate -A "images.\"$ATTR\""); then
-	echo "Error instantiating the image" >&2
-	exit 1
+  echo "Error instantiating the image" >&2
+  exit 1
 fi
 wantedNixHash=$(echo "$drv" | cut -d/ -f4- | cut -d- -f1)
 echo "Successfully calculated wanted image nix hash to be $wantedNixHash" >&2
@@ -25,28 +25,28 @@ echo "Successfully calculated wanted image nix hash to be $wantedNixHash" >&2
 echo "Inspecting whether the image already exists.." >&2
 # TODO: Remove user and password?
 if inspectionJson=$(skopeo inspect --creds "$REGISTRY_USER:$REGISTRY_PASSWORD" "$dest"); then
-	echo "Image does exist already" >&2
+  echo "Image does exist already" >&2
 
-	currentNixHash=$(jq -r '.Labels.NixHash' <<< "$inspectionJson")
-	if [[ "$currentNixHash" == "$wantedNixHash" ]]; then
-		echo "Image has the wanted image nix hash already" >&2
-		echo "Image update not necessary" >&2
-		exit 0
-	fi
+  currentNixHash=$(jq -r '.Labels.NixHash' <<< "$inspectionJson")
+  if [[ "$currentNixHash" == "$wantedNixHash" ]]; then
+    echo "Image has the wanted image nix hash already" >&2
+    echo "Image update not necessary" >&2
+    exit 0
+  fi
 
-	echo "Image has the outdated image nix hash $currentNixHash" >&2
+  echo "Image has the outdated image nix hash $currentNixHash" >&2
 else
-	# TODO: Check whether it doesn't exist or if it's another error
-	echo "Error inspecting the image, assuming it doesn't exist" >&2
-	needsUpdate=1
+  # TODO: Check whether it doesn't exist or if it's another error
+  echo "Error inspecting the image, assuming it doesn't exist" >&2
+  needsUpdate=1
 fi
 
 echo "Image update necessary" >&2
 
 echo "Building the image.." >&2
 if ! out=$(nix-build --no-out-link -A "images.\"$ATTR\"" --argstr nixHash "$wantedNixHash"); then
-	echo "Error building the image" >&2
-	exit 2
+  echo "Error building the image" >&2
+  exit 2
 fi
 echo "Image built successfully" >&2
 
@@ -55,7 +55,7 @@ echo "Pushing the image.." >&2
 src=docker-archive://$out
 # TODO: Remove --insecure-policy
 if ! skopeo copy --insecure-policy --dest-creds "$REGISTRY_USER:$REGISTRY_PASSWORD" "$src" "${dest}"; then
-	echo "Error pushing the image" >&2
-	exit 6
+  echo "Error pushing the image" >&2
+  exit 6
 fi
 echo "Successfully pushed the image" >&2
