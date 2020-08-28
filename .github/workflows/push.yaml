@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   testing:
@@ -19,6 +22,8 @@ jobs:
     name: Build and push image update
     runs-on: ubuntu-latest
     needs: testing
+    # Only push image updates to DockerHub for master commits
+    if: github.event_name == 'push'
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v10
