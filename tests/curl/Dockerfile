@@ -6,5 +6,7 @@ RUN nix-env -if src -A curl -A cacert \
 
 FROM scratch
 COPY --from=build /dist /
-# To allow curl to find certs
-ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+ENV \
+  PATH=/run/profile/bin \
+  # To allow curl to find certs
+  NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt

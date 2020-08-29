@@ -6,35 +6,53 @@ let
   };
   inherit (pkgs) lib;
 
-  # TODO: This is pretty nasty: It puts all files of these contents into / directly
-  # Better do something like images/devcontainer, which only installs them into a profile directory,
-  # keeping / clean like on NixOS
-  # Make sure to still keep /usr/bin/env and /bin/sh
-  envContents = with pkgs; [
-    # Custom things
-    ./root-files
-    scripts.exportProfile
+  # All packages available in the base image
+  env = pkgs.buildEnv {
+    name = "base-env";
+    paths = with pkgs; [
+      # Custom things
+      scripts.exportProfile
 
-    # Very basics
-    coreutils
-    bashInteractive
+      # Very basics
+      coreutils
+      bashInteractive
 
-    # Nix and runtime dependencies of it
-    nix
-    cacert
-    gitReallyMinimal
-    gnutar
-    gzip
-    openssh
-    xz
+      # Nix and runtime dependencies of it
+      nix
+      cacert
+      gitReallyMinimal
+      gnutar
+      gzip
+      openssh
+      xz
 
-    # Extra tools
-    cachix
+      # Extra tools
+      cachix
+    ];
+  };
+
+  # Dynamic files in the filesystem root of the base image
+  dynamicRootFiles = pkgs.runCommandNoCC "dynamic-root-files" {} ''
+    mkdir -p $out/run $out/usr/bin $out/bin
+    cp -R -Ls ${env} $out/run/profile
+    cp -R -Ls ${env}/etc $out/etc
+    ln -s ${pkgs.coreutils}/bin/env $out/usr/bin/env
+    ln -s ${pkgs.bashInteractive}/bin/sh $out/bin/sh
+  '';
+
+  # All contents of the root filesystem
+  rootContents = [
+    ./static-root-files
+    dynamicRootFiles
   ];
 
   # The contents of the Nix database in the built container
-  nixDbContents = envContents ++ [
-    # We add nixpkgs only here because otherwise it would just spill its contents into /
+  nixDbContents = [
+    # We need to include this such that our environment and stuff doesn't get GC'd
+    # and for the environments derivations not to be refetched
+    dynamicRootFiles
+    # We also need the nixpkgs source to be in the Nix db,
+    # which allows it to be used by Nix expressions
     nixpkgs
   ];
 
@@ -57,9 +75,6 @@ let
       ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
     done;
 
-    mkdir -p usr/bin
-    ln -s ../bin/env usr/bin/env
-
     # make sure /tmp exists
     mkdir -m 1777 tmp
   '';
@@ -68,19 +83,19 @@ in pkgs.dockerTools.buildImage {
   # Doesn't make images have a creation date of 1970
   created = "now";
 
-  contents = envContents;
+  contents = rootContents;
   inherit extraCommands;
 
   config = {
-    Cmd = [ "/bin/bash" ];
+    Cmd = [ "bash" ];
     WorkingDir = "/root";
     Env = [
       # So that nix-shell doesn't fetch its own bash
-      "NIX_BUILD_SHELL=/bin/bash"
+      "NIX_BUILD_SHELL=/run/profile/bin/bash"
       # The image itself pins nixpkgs, expose this for convenience
       "NIX_PATH=nixpkgs=${nixpkgs}"
       # Make nix-env installs work
-      "PATH=/nix/var/nix/profiles/default/bin:/bin"
+      "PATH=/nix/var/nix/profiles/default/bin:/run/profile/bin:/bin"
       # Needed for curl and co.
       "NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
       # Docker apparently doesn't set this

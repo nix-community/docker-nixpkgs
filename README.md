@@ -35,8 +35,8 @@ To use this for your project, you should ensure that the prefetched nixpkgs tarb
 ```nix
 fetchTarball {
   name = "nixpkgs-src";
-	url = "https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz";
-	sha256 = "<sha256>";
+  url = "https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz";
+  sha256 = "<sha256>";
 }
 ```
 
@@ -65,22 +65,22 @@ let
 
   # Without niv
   pkgs = fetchTarball {
-		name = "nixpkgs-src";
-		url = "https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz";
-		sha256 = "<sha256>";
-	};
+    name = "nixpkgs-src";
+    url = "https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz";
+    sha256 = "<sha256>";
+  };
 
-	# With niv
-	pkgs = (import nix/sources.nix).nixpkgs;
+  # With niv
+  pkgs = (import nix/sources.nix).nixpkgs;
 
 in {
   myEnv = pkgs.buildEnv {
-		name = "env";
-		paths = with pkgs; [
-			curl
-			cacert
-		];
-	};
+    name = "env";
+    paths = with pkgs; [
+      curl
+      cacert
+    ];
+  };
 }
 ```
 
@@ -94,26 +94,37 @@ COPY . src
 RUN \
   # Install the program to propagate to the final image
   nix-env -f src -iA myEnv \
-	# Exports a root directory structure containing all dependencies installed with nix-env
+  # Exports a root directory structure containing all dependencies
+  # installed with nix-env under /run/profile
   && export-profile /dist
 
 # Second Docker stage, we start with a completely empty image
 FROM scratch
 # Copy the /dist root folder from the previous stage into this one
 COPY --from=build /dist /
+# Set PATH so Nix binaries can be found
+ENV PATH=/run/profile/bin
 ```
+
+#### What `export-profile` does
+
+The main idea of `export-profile <root>` is to export the default `nix-env` profile with all its dependencies into `<root>`, such that the next build stage only needs to initialize its root directory with `<root>` from the previous stage. In more details, the script currently does:
+- Symlink to the default `nix-env` profile from `<root>/run/profile`
+- If the profile contains an `etc` directory, it symlinks to it from `<root>/etc`. This behavior mirrors NixOS, and allows for files like `/etc/bashrc` to take effect
+- If the profile contains a `bin/env` (usually from `pkgs.coreutils`) or `bin/sh` (usually from `pkgs.bashInteractive`), it symlinks to those from `<root>/usr/bin/env` and `<root>/bin/sh` respectively. These are standard POSIX executable paths.
+- All Nix store paths the profile depends on are copied to `<root>/nix/store`. This ensures that any previously established symlinks actually work.
 
 #### SSL root certificates
 
 If you require binaries like `curl` in the final image, you need to make sure that it can find the SSL root certificates. To do this:
 - Install `pkgs.cacert` in the `build` stage, either by adding it to the environment of the attribute you install, or with an additional nix-env command like
   ```
-	  nix-env -f '<nixpkgs>' -iA cacert
-	```
+    nix-env -f '<nixpkgs>' -iA cacert
+  ```
 - Set the `NIX_SSL_CERT_FILE` environment variable as follows in the final stage
   ```Dockerfile
-	ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
-	```
+  ENV NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt
+  ```
 
 #### Updating the Dockerfile
 
