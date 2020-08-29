@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -eu
+docker build "$1" -t final
+imagesize=$(docker image inspect final --format='{{.Size}}')
+closuresize=$(nix path-info --closure-size $(nix-build "$1" --no-out-link -A hello) | cut -d' ' -f 4)
+
+# Allow 10% extra space for whathaveyounot. Not only because there's some overhead, but also because how Docker and Nix measure sizes isn't the same
+maxsize=$(( closuresize * 11 / 10 ))
+if [[ "$imagesize" -gt "$maxsize" ]]; then
+  echo "Final image too big, we expect no more than $maxsize bytes, but it's $imagesize bytes" >&2
+  exit 1
+fi

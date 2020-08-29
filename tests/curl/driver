@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
+set -eu
+docker build "$1" -t final
 docker run final curl https://example.com

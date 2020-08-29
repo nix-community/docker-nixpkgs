@@ -46,15 +46,8 @@ for testcase in "$root"/tests/*; do
   jq --arg attr "$attr" '{ nixpkgs : ."\($attr)" }' \
     "$root"/nix/sources.json > "$tmp"/nix/sources.json
 
-  echo "Building test image.." >&2
-  if ! docker build "$tmp" -t final; then
-    echo "Failed to build test image" >&2
-    continue
-  fi
-  echo "Successfully built test image" >&2
-
   echo "Running test.." >&2
-  if ! "$testcase"/driver; then
+  if ! "$testcase"/driver "$tmp"; then
     echo "Failed to run test" >&2
     continue
   fi
@@ -64,7 +57,10 @@ for testcase in "$root"/tests/*; do
 
 done
 
-echo "Finished running tests, $successCount/$totalCount succeeded"
+echo "Finished running tests for $attr, $successCount/$totalCount succeeded" >&2
 if [[ "$successCount" != "$totalCount" ]]; then
   exit 1
 fi
+
+echo "" >&2
+echo "" >&2
