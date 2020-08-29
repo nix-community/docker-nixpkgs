@@ -28,6 +28,7 @@ let
 
       # Extra tools
       cachix
+      less
     ];
   };
 
@@ -100,6 +101,8 @@ in pkgs.dockerTools.buildImage {
       "NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
       # Docker apparently doesn't set this
       "USER=root"
+      # Needed by some nix commands like nix-store to display output
+      "PAGER=/run/profile/bin/less"
     ];
   } // lib.optionalAttrs (nixHash != null) {
     # Embed a nixHash into the image if given, allowing later extraction via skopeo inspect
