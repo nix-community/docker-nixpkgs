@@ -22,9 +22,9 @@ jobs:
       with:
         skip_adding_nixpkgs_channel: true
     - name: Building updater
-      run: nix-build -A nixpkgs-updater
+      run: nix-build -A nixpkgsUpdater
     - name: Running updater
-      run: result/bin/update
+      run: ./result
     - name: Commit updates
       run: |
         git status

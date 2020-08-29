@@ -9,7 +9,6 @@
 , xz
 , stdenv
 , cachix
-, shadow
 , pkgs
 , lib
 , less
@@ -20,8 +19,6 @@
 , gitReallyMinimal
 
 , nixpkgs
-, attr
-, rev
 , nixHash
 }:
 let
@@ -45,8 +42,7 @@ let
   ];
 in
 dockerTools.buildImage {
-  name = "niteo/nixpkgs-${attr}";
-  tag = rev;
+  name = "nixpkgs";
   created = "now";
 
   # TODO: This is pretty nasty: It puts all files of these contents into / directly

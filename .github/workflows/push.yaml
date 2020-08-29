@@ -16,8 +16,10 @@ jobs:
     - uses: cachix/install-nix-action@v10
       with:
         skip_adding_nixpkgs_channel: true
+    - name: Build test runner
+      run: nix-build -A testRunner
     - name: Run tests
-      run: tests/run-tests
+      run: ./result
   image-update:
     name: Build and push image update
     runs-on: ubuntu-latest
@@ -30,9 +32,9 @@ jobs:
       with:
         skip_adding_nixpkgs_channel: true
     - name: Build updater
-      run: nix-build -A image-updater
+      run: nix-build -A imageUpdater
     - name: Running updater
       env:
         REGISTRY_USER: niteo
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      run: result/bin/update
+      run: ./result

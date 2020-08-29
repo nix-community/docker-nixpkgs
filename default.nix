@@ -3,11 +3,6 @@ let
   inherit (import ./nix) pkgs sources;
   inherit (pkgs) lib;
 
-  imageUpdater = pkgs.writeShellScriptBin "update" (lib.concatStringsSep "\n"
-    (lib.mapAttrsToList (attr: nixpkgs: ''
-      ATTR=${attr} TAG=${nixpkgs.rev} \
-        ${pkgs.scripts.singleImageUpdater}/bin/update
-    '') sources));
 
   images = lib.mapAttrs (attr: nixpkgs:
     # Allows specifying --argstr nixHash on the CLI
@@ -23,12 +18,23 @@ let
         name = "nixpkgs-src";
         inherit (nixpkgs) url sha256;
       };
-      inherit attr nixHash;
-      rev = nixpkgs.rev;
+      inherit nixHash;
     }
   ) sources;
 
-  nixpkgsUpdater = pkgs.writeShellScriptBin "update" ''
+  imageUpdater = pkgs.writeShellScript "update" (lib.concatStringsSep "\n"
+    (lib.mapAttrsToList (attr: nixpkgs: ''
+      ${pkgs.scripts.image-update} \
+        ${toString ./.} ${attr} ${nixpkgs.rev}
+    '') sources));
+
+  testRunner = pkgs.writeShellScript "test-runner" (lib.concatStringsSep "\n"
+    (lib.mapAttrsToList (attr: nixpkgs: ''
+      ${pkgs.scripts.run-tests} \
+        ${toString ./.} ${attr}
+    '') sources));
+
+  nixpkgsUpdater = pkgs.writeShellScript "update" ''
     export PATH=${lib.makeBinPath [ pkgs.niv pkgs.gnused pkgs.jq ]}:$PATH
 
     echo "Updating niv nixpkgs sources.." >&2
@@ -46,9 +52,9 @@ in {
   inherit images;
 
   # Updaters for CI
-  inherit nixpkgsUpdater imageUpdater;
+  inherit testRunner imageUpdater nixpkgsUpdater;
 
-  # Needed if adding a new channel
+  # Needed for adding a new channel, used in shell.nix
   devShell = pkgs.mkShell {
     buildInputs = [ pkgs.niv ];
   };

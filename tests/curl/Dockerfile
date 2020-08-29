@@ -1,4 +1,4 @@
-FROM niteo/nixpkgs-nixos-20.03:14006b724f3d1f25ecf38238ee723d38b0c2f4ce AS build
+FROM base AS build
 
 COPY . src
 RUN nix-env -if src -A curl -A cacert \

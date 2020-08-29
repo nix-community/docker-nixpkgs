@@ -1,12 +1,18 @@
-set -u
-
+set -euo pipefail
+# Arguments:
+# - root directory
+# - attribute to test
+# - nixpkgs commit/image tag
 # Env vars:
 # - REGISTRY_USER
 # - REGISTRY_PASSWORD
-# - ATTR
-# - TAG
 
-name=$REGISTRY_USER/nixpkgs-$ATTR:$TAG
+root=$1
+attr=$2
+tag=$3
+
+
+name=$REGISTRY_USER/nixpkgs-$attr:$tag
 dest=docker://docker.io/$name
 
 echo "=== Image $dest ===" >&2
@@ -14,7 +20,7 @@ echo "=== Image $dest ===" >&2
 echo "Checking whether the image needs to be updated.." >&2
 
 echo "Calculating wanted image nix hash by instantiating the image derivation.." >&2
-if ! drv=$(nix-instantiate -A "images.\"$ATTR\""); then
+if ! drv=$(nix-instantiate "$root" -A "images.\"$attr\""); then
   echo "Error instantiating the image" >&2
   exit 1
 fi
@@ -43,13 +49,12 @@ fi
 echo "Image update necessary" >&2
 
 echo "Building the image.." >&2
-if ! out=$(nix-build --no-out-link -A "images.\"$ATTR\"" --argstr nixHash "$wantedNixHash"); then
+if ! out=$(nix-build "$root" --no-out-link -A "images.\"$attr\"" --argstr nixHash "$wantedNixHash"); then
   echo "Error building the image" >&2
   exit 2
 fi
 echo "Image built successfully" >&2
 
-# TODO: Don't for PRs
 echo "Pushing the image.." >&2
 src=docker-archive://$out
 # TODO: Remove --insecure-policy

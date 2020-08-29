@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run final curl https://example.com
