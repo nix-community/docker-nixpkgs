@@ -3,7 +3,6 @@
 , bashInteractive
 , nix
 , cacert
-, gitReallyMinimal
 , gnutar
 , gzip
 , openssh
@@ -18,6 +17,8 @@
 , gnused
 
 , scripts
+, gitReallyMinimal
+
 , nixpkgs
 , attr
 , rev
@@ -27,7 +28,7 @@ let
 
   envContents = [
     scripts.exportProfile
-    images/nix/root
+    ./root-files
     coreutils
     bashInteractive
     nix
