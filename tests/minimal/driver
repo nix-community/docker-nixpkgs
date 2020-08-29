@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# This tests that the final image isn't much bigger than the closure of the Nix dependencies it should contain
+
 set -eu
 docker build "$1" -t final
 imagesize=$(docker image inspect final --format='{{.Size}}')

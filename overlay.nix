@@ -1,16 +1,10 @@
-_: pkgs: {
+final: prev: {
 
-  scripts = pkgs.callPackage ./scripts {};
-
-  # builder stuff can be in the top-level
-  buildCLIImage = pkgs.callPackage ./lib/buildCLIImage.nix {};
-
-  # used to build nix-env compatible user environments
-  mkUserEnvironment = pkgs.callPackage ./lib/mkUserEnvironment.nix {};
+  scripts = prev.callPackage ./scripts {};
 
   # gitMinimal still ships with perl and python
   gitReallyMinimal = (
-    pkgs.git.override {
+    prev.git.override {
       perlSupport = false;
       pythonSupport = false;
       withManual = false;
