@@ -4,7 +4,6 @@
 
   exportProfile = writeShellScriptBin "export-profile" (builtins.readFile ./export-profile);
 
-  # TODO: Don't use different names
   image-update = writeShellScript "image-update" ''
     export PATH=${lib.makeBinPath [ skopeo jq ]}:$PATH
     ${builtins.readFile ./image-update}

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 set -eu
+
+# This tests that a final image can be used to run a binary,
+# and that the NIX_SSL_CERT_FILE env var works
+
 docker build "$1" -t final
 docker run final curl https://example.com
