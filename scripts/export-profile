@@ -13,18 +13,43 @@ elif [[ -e "$root" ]]; then
   exit 1
 fi
 
-# Copy the profile directory to the new root, such that all the profiles
-# binaries in $profile/bin/* will be available as /bin/* in the new root
-#
-# Note that cp -Ls is used to replicate the directory structure of the
-# profile but use symlinks to point back to the files in the Nix store
-# This for one avoids the problem of Docker overriding /etc when starting
-echo "Copying $profile to $root" >&2
-mkdir -p "$(dirname "$root")"
-cp -R -Ls "$profile" "$root"
+# The standard Nix locations for profiles are either /run/current-system/sw on
+# NixOS or /nix/var/nix/profiles/per-user/<user> for user-level profiles
+# But these are both long and don't really fit (we're neither on NixOS nor will
+# there be Nix installed). So choose /run/profile to keep this short
+targetProfile="$root"/run/profile
 
-# Remove the env manifest file as we don't need it
-rm "$root"/manifest.nix
+# Link /run/profile to the Nix profile
+echo "Linking $targetProfile to $profile" >&2
+mkdir -p "$(dirname "$targetProfile")"
+# Apparently Docker somehow deduplicates directory symlinks, causing problems
+# down the line. So instead of symlinking the directory directly, we symlink all
+# the files recursively instead. See below for the -Ls flags
+cp -R -Ls "$profile" "$targetProfile"
+
+# If the profile contains an etc directory, link all of its files to the roots /etc
+#
+# Note that the -Ls flags are used to replicate the directory structure of etc
+# with symlinks for all files. This avoids conflicts with other files Docker may
+# put in /etc
+if [[ -e "$profile"/etc ]]; then
+  echo "Linking from $root/etc to $profile/etc" >&2
+  cp -R -Ls "$profile"/etc "$root"/etc
+fi
+
+# If the profile contains bin/env, link to that from /usr/bin/env for POSIX
+if [[ -x "$profile"/bin/env ]]; then
+  echo "Linking from $root/usr/bin/env to $profile/bin/env" >&2
+  mkdir -p "$root"/usr/bin
+  ln -s "$profile"/bin/env "$root"/usr/bin/env
+fi
+
+# If the profile contains bin/sh, link to that from /bin/sh for POSIX
+if [[ -x "$profile"/bin/sh ]]; then
+  echo "Linking from $root/bin/sh to $profile/bin/sh" >&2
+  mkdir -p "$root"/bin
+  ln -s "$profile"/bin/sh "$root"/bin/sh
+fi
 
 # We also need the profiles closure in the new root for all symlinks to be valid
 echo "Copying all the profiles Nix dependencies to $root" >&2
