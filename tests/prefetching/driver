@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -u
+echo "$1"
+string="downloading 'https://github.com/NixOS/nixpkgs/archive"
+output=$(mktemp)
+docker build "$1" | tee "$output"
+if grep "$string" "$output" >/dev/null; then
+  echo "Image build didn't use the prefetched nixpkgs"
+  exit 1
+fi
