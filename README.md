@@ -127,8 +127,37 @@ rev=$(jq -r .nixpkgs.rev nix/sources.json)
 sed -i "1cFROM niteo/nixpkgs-$channel:$rev AS build"
 ```
 
+## Development and Contributing
+
+This section is only intended for developers/contributors of this project. Feel free to contribute by opening a PR or open issues for enquiries.
+
+### Adding new nixpkgs channels
+
+After entering a `nix-shell`, adding new nixpkgs channels to track can be done with
+```bash
+channel=nixos-20.09
+niv add NixOS/nixpkgs -n "$channel" -b "$channel"
+```
+
+### Running tests
+
+Tests are automatically run by CI, but can also be run manually with
+```
+nix-build -A testRunner
+./result
+```
+
+### Adding new tools to the base image
+
+New tools for the base image can be added under `Extra tools` in [image.nix](./image.nix).
+
+### Out-of-tree requirements for forks
+
+- A [DockerHub](https://hub.docker.com/) account. Insert your username for `REGISTRY_USER` in the [push.yml](.github/workflows/push.yml) workflow, and set up the password as a `REGISTRY_PASSWORD` secret for the repository. This is of course needed to update images on DockerHub. Other container registries could work too, but the code needs to be adjusted for that.
+- A GitHub personal access token, which you can generate [here](https://github.com/settings/tokens/new). Set this as an `UPDATE_GITHUB_TOKEN` secret in the repository. It's used by the [nixpkgs-update.yml](.github/workflows/nixpkgs-update.yml) workflow to automatically update the niv sources and trigger image updates.
+
 ## Related projects
 
-- This project was originally forked from https://github.com/nix-community/docker-nixpkgs, some code of which is still used
+- This project was originally forked from https://github.com/nix-community/docker-nixpkgs, but almost no code remains unchanged
 - The official Nix docker images at https://github.com/nixos/docker
 - [Nixery](https://nixery.dev/) is a pretty cool service that builds docker images from nixpkgs attributes on the fly
