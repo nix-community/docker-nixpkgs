@@ -1,6 +1,6 @@
 # nix-docker-base: Nix Docker base images for fast and minimal builds
 
-This project automatically generates Docker images for nixpkgs channels. The images come with a prefetched nixpkgs, corresponding to the image tag, which is the nixpkgs commit hash. All basic Nix utilities are preinstalled, including cachix. Also included is the `export-profile` script, allowing super minimal images via [multi-stage builds](https://docs.docker.com/develop/develop-images/multistage-build/).
+This project automatically generates Docker images for nixpkgs channels. The images come with a prefetched nixpkgs, corresponding to the image tag, which is the nixpkgs commit hash. All basic Nix utilities are preinstalled, including [Cachix](https://cachix.org/). Also included is the `export-profile` script, allowing super minimal images via [multi-stage builds](https://docs.docker.com/develop/develop-images/multistage-build/).
 
 
 See the [Usage](#usage) section for how to use it in your project.
@@ -13,19 +13,19 @@ All images come prefetched with the [nixpkgs](https://github.com/NixOS/nixpkgs) 
 
 ### Preinstalled dependencies
 
-All images come preinstalled with a basic set of dependencies needed for working with Nix. This currently includes [cachix](https://cachix.org/) and all dependencies of Nix, but may be expanded in the future as the need arises. Since the intend is to only use these images as a first stage in multi-stage builds, they won't influence the final image size, allowing the addition of more tools without a significant cost.
+All images come preinstalled with a basic set of dependencies needed for working with Nix. This currently includes [Cachix](https://cachix.org/) and all dependencies of Nix, but may be expanded in the future as the need arises. Since the intent is to use these images as the first stage in a multi-stage build, they won't influence the final image size, allowing the addition of more tools without a significant cost.
 
 These dependencies notably come from the very nixpkgs version that is prefetched. If you need these tools or their dependencies in a Nix build, this saves you the cost of having to download them.
 
 ### Automatic channel updates
 
-Every hour, the [Nixpkgs update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Nixpkgs+update%22) GitHub Actions workflow runs to detect any channel updates. If that's the case, an update commit is pushed to master, which triggers the [Image update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Test+%26+image+update%22) workflow to build the new images and push them to DockerHub.
+Every hour, the [Nixpkgs update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Nixpkgs+update%22) GitHub Actions workflow runs to detect any channel updates. If that's the case, an update commit is pushed to master, which triggers the [Image update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Test+%26+image+update%22) workflow to build new images and push them to DockerHub.
 
 Additionally, if this repository changes how images are built, the image tags corresponding to the latest channel versions are updated to incorporate these changes. This is the only way in which tagged images are updated, meaning once a nixpkgs channel commit is outdated, its image won't get updated anymore. So if this repository receives an update, you need to update nixpkgs to the latest version of the channel.
 
 ### Minimal multi-stage builds
 
-The images contain the `export-profile` utility, which allows easy creation of a final stage in Docker [multi-stage builds](https://docs.docker.com/develop/develop-images/multistage-build/). The resulting image then contains only exactly the dependencies needed to run the programs you specify, nothing else.
+All images contain the `export-profile` utility, which allows easy creation of a final stage in Docker [multi-stage builds](https://docs.docker.com/develop/develop-images/multistage-build/). The resulting image then contains only exactly the dependencies needed to run the programs you specify, nothing else.
 
 ## Usage
 
@@ -42,15 +42,15 @@ fetchTarball {
 
 Note that choosing the name as `nixpkgs-src` is very important, because Nix can only reuse a prefetched version if the name matches.
 
-Only Nix channels specified in [nix/sources.json](./nix/sources.json) are available, but new ones may be added over time. Also only commits after the addition of the channel are available, so there's no history of commits that goes past when the channel was added to this repository.
+Only Nix channels specified in [nix/sources.json](./nix/sources.json) are available, but new ones may be added over time. Only commits after the addition of the channel are available, so there's no history of commits that goes past when the channel was added to this repository.
 
 #### Using [Niv](https://github.com/nmattia/niv)
 
-Since niv uses `<package name>-src` as the derivation name, you need to ensure that `nixpkgs` is the package name of the nixpkgs source, which is the default for the `NixOS/nixpkgs` repository.
+Since Niv uses `<package name>-src` as the derivation name, you need to ensure that `nixpkgs` is the package name of the nixpkgs source, which is the default for the `NixOS/nixpkgs` repository.
 
 In addition, make sure to specify the correct channel branch. For some time now the main `NixOS/nixpkgs` repository contains all channel branches, so using `NixOS/nixpkgs-channels` isn't necessary.
 
-For a new project wanting to use the `nixos-20.03` branch, the following niv command will set it up correctly:
+For a new project wanting to use the `nixos-20.03` branch, the following `niv` command will set it up correctly:
 ```bash
 niv add NixOS/nixpkgs -b nixos-20.03
 ```
@@ -116,7 +116,7 @@ The main idea of `export-profile <root>` is to export the default `nix-env` prof
 
 #### SSL root certificates
 
-If you require binaries like `curl` in the final image, you need to make sure that it can find the SSL root certificates. To do this:
+If you require binaries like `curl` in the final image, you need to make sure that they can find SSL root certificates. To do this:
 - Install `pkgs.cacert` in the `build` stage, either by adding it to the environment of the attribute you install, or with an additional nix-env command like
   ```
     nix-env -f '<nixpkgs>' -iA cacert
@@ -128,7 +128,7 @@ If you require binaries like `curl` in the final image, you need to make sure th
 
 #### Updating the Dockerfile
 
-Since the nixpkgs commit is embedded into the Dockerfile, it should be kept it sync with the nixpkgs of your Nix files to ensure it being as efficient as possible. So if you update your nixpkgs source to a newer channel commit, be sure to update it in the Dockerfile as well.
+Since the nixpkgs commit is embedded into the Dockerfile, it should be kept in sync with the nixpkgs of your Nix files to ensure it being as efficient as possible. So if you update your nixpkgs source to a newer channel commit, be sure to update it in the Dockerfile as well.
 
 If you manage your nixpkgs source with `niv`, this can be achieved automatically with the following commands:
 ```bash
@@ -152,7 +152,7 @@ niv add NixOS/nixpkgs -n "$channel" -b "$channel"
 
 ### Running tests
 
-Tests are automatically run by CI, but can also be run manually with
+Tests are automatically run by [CI](https://github.com/niteoweb/nix-docker-base/actions?query=workflow%3A%22Test+%26+image+update%22), but can also be run manually with
 ```
 nix-build -A testRunner
 ./result
@@ -165,10 +165,10 @@ New tools for the base image can be added under `Extra tools` in [image.nix](./i
 ### Out-of-tree requirements for forks
 
 - A [DockerHub](https://hub.docker.com/) account. Insert your username for `REGISTRY_USER` in the [push.yml](.github/workflows/push.yml) workflow, and set up the password as a `REGISTRY_PASSWORD` secret for the repository. This is of course needed to update images on DockerHub. Other container registries could work too, but the code needs to be adjusted for that.
-- A GitHub personal access token, which you can generate [here](https://github.com/settings/tokens/new). Set this as an `UPDATE_GITHUB_TOKEN` secret in the repository. It's used by the [nixpkgs-update.yml](.github/workflows/nixpkgs-update.yml) workflow to automatically update the niv sources and trigger image updates.
+- A [GitHub personal access token](https://github.com/settings/tokens/new). Set this as the `UPDATE_GITHUB_TOKEN` secret in the repository. It's used by the [nixpkgs-update.yml](.github/workflows/nixpkgs-update.yml) workflow to automatically update Niv sources and trigger image updates.
 
 ## Related projects
 
-- This project was originally forked from https://github.com/nix-community/docker-nixpkgs, but almost no code remains unchanged
-- The official Nix docker images at https://github.com/nixos/docker
-- [Nixery](https://nixery.dev/) is a pretty cool service that builds docker images from nixpkgs attributes on the fly
+- This project was originally forked from https://github.com/nix-community/docker-nixpkgs, but almost no code remains unchanged.
+- The official Nix docker images at https://github.com/nixos/docker.
+- [Nixery](https://nixery.dev/) is a pretty cool service that builds docker images from nixpkgs attributes on the fly.
