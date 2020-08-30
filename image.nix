@@ -29,6 +29,8 @@ let
       # Extra tools
       cachix
       less
+      gnused
+      gnugrep
     ];
   };
 
