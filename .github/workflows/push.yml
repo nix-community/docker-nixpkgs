@@ -16,6 +16,10 @@ jobs:
     - uses: cachix/install-nix-action@v10
       with:
         skip_adding_nixpkgs_channel: true
+    - uses: cachix/cachix-action@v6
+      with:
+        name: nix-docker-base
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Build test runner
       run: nix-build -A testRunner
     - name: Run tests
@@ -31,6 +35,10 @@ jobs:
     - uses: cachix/install-nix-action@v10
       with:
         skip_adding_nixpkgs_channel: true
+    - uses: cachix/cachix-action@v6
+      with:
+        name: nix-docker-base
+        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Build updater
       run: nix-build -A imageUpdater
     - name: Running updater

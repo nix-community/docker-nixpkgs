@@ -181,6 +181,7 @@ New tools for the base image can be added under `Extra tools` in [image.nix](./i
 
 - A [DockerHub](https://hub.docker.com/) account. Insert your username for `REGISTRY_USER` in the [push.yml](.github/workflows/push.yml) workflow, and set up the password as a `REGISTRY_PASSWORD` secret for the repository. This is of course needed to update images on DockerHub. Other container registries could work too, but the code needs to be adjusted for that.
 - A [GitHub personal access token](https://github.com/settings/tokens/new). Set this as the `UPDATE_GITHUB_TOKEN` secret in the repository. It's used by the [nixpkgs-update.yml](.github/workflows/nixpkgs-update.yml) workflow to automatically update Niv sources and trigger image updates.
+- A [Cachix](https://cachix.org/) cache for speeding up CI. Set the Cachix name under the `cachix-action`s in the [push.yml](.github/workflows/push.yml) workflow, and add the signing key as the `CACHIX_SIGNING_KEY` secret in the repository.
 
 ## Related projects
 
