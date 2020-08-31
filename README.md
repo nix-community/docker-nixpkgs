@@ -150,7 +150,7 @@ If you manage your nixpkgs source with `niv`, this can be achieved automatically
 niv update nixpkgs
 channel=$(jq -r .nixpkgs.branch nix/sources.json)
 rev=$(jq -r .nixpkgs.rev nix/sources.json)
-sed -i "1cFROM niteo/nixpkgs-$channel:$rev AS build" Dockerfile
+sed -i "s#FROM.*AS build#FROM niteo/nixpkgs-$channel:$rev AS build#g" Dockerfile
 ```
 
 ## Development and Contributing
