@@ -26,7 +26,7 @@ jobs:
       # and the commit block is always ran
       run: |
         git status
-        if ! git diff-files; then
+        if ! git diff-files --quiet; then
           echo "Changes detected, committing them"
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
