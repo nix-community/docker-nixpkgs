@@ -1,0 +1,7 @@
+if [[ $(nproc) > 30 ]]; then
+  maxjobs=30
+else
+  maxjobs=auto
+fi
+
+echo "max-jobs = $maxjobs" >> /etc/nix/nix.conf
