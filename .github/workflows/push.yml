@@ -34,13 +34,13 @@ jobs:
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
     - name: Running non-pushing updater
       if: github.event_name == 'pull_request'
-      run: nix-shell --run 'scripts/image-update test "$PWD" ${{ matrix.channel }} 32'
+      run: nix-shell --run 'scripts/image-update test "$PWD" ${{ matrix.channel }} 16'
       env:
         REGISTRY_USER: niteo
     - name: Running pushing updater
       # Only push image updates to DockerHub for master commits
       if: github.event_name != 'pull_request'
-      run: nix-shell --run 'scripts/image-update push "$PWD" ${{ matrix.channel }} 32'
+      run: nix-shell --run 'scripts/image-update push "$PWD" ${{ matrix.channel }} 16'
       env:
         REGISTRY_USER: niteo
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
