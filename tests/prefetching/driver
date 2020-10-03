@@ -2,7 +2,7 @@
 
 # This tests that the nixpkgs tarball for the required nixpkgs version is downloaded
 
-set -u
+set -eu
 echo "$1"
 string="downloading 'https://github.com/NixOS/nixpkgs/archive"
 output=$(mktemp)

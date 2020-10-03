@@ -1,50 +1,40 @@
+#!/usr/bin/env bash
 set -euo pipefail
 # Arguments:
 # - root directory
 # - attribute to test
 
 root=$1
-attr=$2
+out=$2
+commit=$3
+nixpkgsSha=$4
 
-echo "Running tests for $attr.." >&2
+echo "Running tests for $out.." >&2
 
 successCount=0
 totalCount=0
+
+echo "Loading built image into docker.." >&2
+if ! image=$(docker load -i "$out" | sed -n 's/^Loaded image: \(.*\)$/\1/p'); then
+  echo "Failed to load the built image into docker" >&2
+  exit 1
+fi
+if ! docker tag "$image" base; then
+  echo "Failed to tag image" >&2
+  exit 1
+fi
+echo "Successfully loaded built image into docker" >&2
 
 for testcase in "$root"/tests/*; do
   echo "Running testcase $testcase.." >&2
   totalCount=$(( totalCount + 1 ))
 
-  echo "Building the image.." >&2
-  if ! out=$(nix-build "$root" --no-out-link -A "images.\"$attr\""); then
-    echo "Error building the image" >&2
-    continue
-  fi
-  echo "Image built successfully" >&2
-
-  echo "Loading built image into docker.." >&2
-  if ! image=$(docker load -i "$out" | sed -n 's/^Loaded image: \(.*\)$/\1/p'); then
-    echo "Failed to load the built image into docker" >&2
-    continue
-  fi
-  if ! docker tag "$image" base; then
-    echo "Failed to tag image" >&2
-    continue
-  fi
-  echo "Successfully loaded built image into docker" >&2
-
   # Copy all the test cases files into a new directory
   tmp=$(mktemp -d)
   cp -rT "$testcase" "$tmp"
 
-  # Copy niv's sources.nix into it
-  mkdir "$tmp"/nix
-  cp "$root"/nix/sources.nix "$tmp"/nix
-
-  # Filter and modify the main sources.json to only
-  # export the attr we want to test as nixpkgs
-  jq --arg attr "$attr" '{ nixpkgs : ."\($attr)" }' \
-    "$root"/nix/sources.json > "$tmp"/nix/sources.json
+  echo -n "$commit" > "$tmp"/nixpkgsCommit
+  echo -n "$nixpkgsSha" > "$tmp"/nixpkgsSha
 
   echo "Running test.." >&2
   if ! "$testcase"/driver "$tmp"; then
@@ -57,7 +47,7 @@ for testcase in "$root"/tests/*; do
 
 done
 
-echo "Finished running tests for $attr, $successCount/$totalCount succeeded" >&2
+echo "Finished running tests for $out, $successCount/$totalCount succeeded" >&2
 if [[ "$successCount" != "$totalCount" ]]; then
   exit 1
 fi
