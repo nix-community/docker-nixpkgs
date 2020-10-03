@@ -24,6 +24,11 @@ root=$2
 channel=$3
 count=$4
 
+calcNixpkgsSha() {
+  commit=$1
+  nix-prefetch-url --name nixpkgs-src --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz"
+}
+
 fetchExistingHash() {
   commit=$1
   name=$REGISTRY_USER/nixpkgs-$channel:$commit
@@ -111,7 +116,7 @@ processEntry() {
   if [[ -n "$testing" && -n "$first" ]]; then
 
     echo "Only testing first entry"
-    nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+    nixpkgsSha=$(calcNixpkgsSha "$commit")
     if buildTestPushImage "$commit" "$nixpkgsSha" ""; then
       return 0
     else
@@ -124,7 +129,7 @@ processEntry() {
 
       if [[ -n "$first" ]]; then
 
-        nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+        nixpkgsSha=$(calcNixpkgsSha "$commit")
         if wantedHash=$(calcWantedHash "$commit" "$nixpkgsSha"); then
           # If an image exists already, we compare the hash it has embedded to the one
           # we calculated for the inputs we have. If they are the same, we don't need to
@@ -142,7 +147,7 @@ processEntry() {
 
     else
 
-      nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+      nixpkgsSha=$(calcNixpkgsSha "$commit")
       if wantedHash=$(calcWantedHash "$commit" "$nixpkgsSha"); then
         buildTestPushImage "$commit" "$nixpkgsSha" "$wantedHash"
       fi
