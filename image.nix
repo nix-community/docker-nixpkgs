@@ -1,17 +1,27 @@
-{ nixpkgs, nixHash }:
+{ nixpkgsRev, nixpkgsSha, nixHash ? null }:
 let
+  nixpkgs = fetchTarball {
+    # Rename the derivation to accomodate the standard niv naming of nixpkgs
+    name = "nixpkgs-src";
+    url = "https://github.com/NixOS/nixpkgs/archive/${nixpkgsRev}.tar.gz";
+    sha256 = nixpkgsSha;
+  };
+
+
   pkgs = import nixpkgs {
     config = {};
     overlays = [ (import ./overlay.nix) ];
   };
   inherit (pkgs) lib;
 
+  exportProfile = pkgs.writeShellScriptBin "export-profile" (builtins.readFile ./scripts/export-profile);
+
   # All packages available in the base image
   env = pkgs.buildEnv {
     name = "base-env";
     paths = with pkgs; [
       # Custom things
-      scripts.exportProfile
+      exportProfile
 
       # Very basics
       coreutils

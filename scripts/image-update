@@ -1,71 +1,167 @@
+#!/usr/bin/env bash
+
 set -euo pipefail
 # Arguments:
+# - [test|push]
 # - root directory
-# - attribute to test
-# - nixpkgs commit/image tag
+# - Channel name
+# - Number of channel updates to ensure
 # Env vars:
 # - REGISTRY_USER
 # - REGISTRY_PASSWORD
+case "$1" in
+  test)
+    testing=1
+    ;;
+  push)
+    testing=
+    ;;
+  *)
+    echo "Unknown operation: $1" >&2
+    ;;
+esac
+root=$2
+channel=$3
+count=$4
 
-root=$1
-attr=$2
-tag=$3
+fetchExistingHash() {
+  commit=$1
+  name=$REGISTRY_USER/nixpkgs-$channel:$commit
+  dest=docker://docker.io/$name
 
+  echo "Inspecting whether the image already exists.." >&2
+  if inspectionJson=$(skopeo inspect --insecure-policy "$dest"); then
+    echo "Image does exist already" >&2
+    jq -r '.Labels.NixHash' <<< "$inspectionJson"
+    return 0
+  else
+    # TODO: Check whether it doesn't exist or if it's another error
+    echo "Error inspecting the image, assuming it doesn't exist" >&2
+    return 1
+  fi
+}
 
-name=$REGISTRY_USER/nixpkgs-$attr:$tag
-dest=docker://docker.io/$name
+calcWantedHash() {
+  commit=$1
+  nixpkgsSha=$2
 
-echo "=== Image $dest ===" >&2
+  echo "Calculating wanted image nix hash by instantiating the image derivation.." >&2
+  # nix-instantiate hashes all inputs to the build, so if any inputs change, the hash changes too
+  if ! drv=$(nix-instantiate "$root/image.nix" --argstr nixpkgsRev "$commit" --argstr nixpkgsSha "$nixpkgsSha"); then
+    echo "Error instantiating the image" >&2
+    return 1
+  fi
+  wantedNixHash=$(echo "$drv" | cut -d/ -f4- | cut -d- -f1)
+  echo "Successfully calculated wanted image nix hash to be $wantedNixHash" >&2
 
-echo "Checking whether the image needs to be updated.." >&2
+  echo "$wantedNixHash"
+}
 
-echo "Calculating wanted image nix hash by instantiating the image derivation.." >&2
-# nix-instantiate hashes all inputs to the build, so if any inputs change, the hash changes too
-if ! drv=$(nix-instantiate "$root" -A "images.\"$attr\""); then
-  echo "Error instantiating the image" >&2
-  exit 1
-fi
-wantedNixHash=$(echo "$drv" | cut -d/ -f4- | cut -d- -f1)
-echo "Successfully calculated wanted image nix hash to be $wantedNixHash" >&2
+buildTestPushImage() {
+  commit=$1
+  nixpkgsSha=$2
+  nixHash=$3
+  name=$REGISTRY_USER/nixpkgs-$channel:$commit
+  dest=docker://docker.io/$name
 
-echo "Inspecting whether the image already exists.." >&2
-if inspectionJson=$(skopeo inspect "$dest"); then
-  echo "Image does exist already" >&2
+  echo "Building the image.." >&2
+  # Here we specifically don't reuse the previously instantiated derivation,
+  # because now we embed the hash into the derivation itself, which would change
+  # the hash again. Since this hash however doesn't influence the build, we can
+  # ignore this hash change
+  if ! out=$(nix-build "$root/image.nix" --no-out-link --argstr nixpkgsRev "$commit" --argstr nixpkgsSha "$nixpkgsSha" --argstr nixHash "$nixHash"); then
+    echo "Error building the image" >&2
+    return 1
+  fi
+  echo "Image built successfully" >&2
 
-  # If an image exists already, we compare the hash it has embedded to the one
-  # we calculated for the inputs we have. If they are the same, we don't need to
-  # update the image. If they're not the same, something changed and an update
-  # is needed
-  currentNixHash=$(jq -r '.Labels.NixHash' <<< "$inspectionJson")
-  if [[ "$currentNixHash" == "$wantedNixHash" ]]; then
-    echo "Image has the wanted image nix hash already" >&2
-    echo "Image update not necessary" >&2
-    exit 0
+  echo "Testing image.." >&2
+  if ! "$root/scripts/run-tests" "$root" "$out" "$commit" "$nixpkgsSha"; then
+    echo "Image tests failed" >&2
+    return 1
   fi
 
-  echo "Image has the outdated image nix hash $currentNixHash" >&2
-else
-  # TODO: Check whether it doesn't exist or if it's another error
-  echo "Error inspecting the image, assuming it doesn't exist" >&2
-fi
+  if [[ -n "$testing" ]]; then
+    echo "Not pushing the image because only testing" >&2
+    return 0
+  fi
 
-echo "Image update necessary" >&2
+  echo "Pushing the image.." >&2
+  src=docker-archive://$out
+  if ! skopeo copy --insecure-policy --dest-creds "$REGISTRY_USER:$REGISTRY_PASSWORD" "$src" "${dest}"; then
+    echo "Error pushing the image" >&2
+    return 1
+  fi
+  echo "Successfully pushed the image" >&2
+}
 
-echo "Building the image.." >&2
-# Here we specifically don't reuse the previously instantiated derivation,
-# because now we embed the hash into the derivation itself, which would change
-# the hash again. Since this hash however doesn't influence the build, we can
-# ignore this hash change
-if ! out=$(nix-build "$root" --no-out-link -A "images.\"$attr\"" --argstr nixHash "$wantedNixHash"); then
-  echo "Error building the image" >&2
-  exit 2
-fi
-echo "Image built successfully" >&2
+isFirst=1
 
-echo "Pushing the image.." >&2
-src=docker-archive://$out
-if ! skopeo copy --dest-creds "$REGISTRY_USER:$REGISTRY_PASSWORD" "$src" "${dest}"; then
-  echo "Error pushing the image" >&2
-  exit 6
-fi
-echo "Successfully pushed the image" >&2
+processEntry() {
+  if [[ -n "$isFirst" ]]; then
+    first=1
+  else
+    first=
+  fi
+  isFirst=
+
+  read commit commitDate advanceDate <<< "$entry"
+  echo "Processing commit $commit which $channel advanced to at $(date --date="@$advanceDate")" >&2
+
+  if [[ -n "$testing" && -n "$first" ]]; then
+
+    echo "Only testing first entry"
+    nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+    if buildTestPushImage "$commit" "$nixpkgsSha" ""; then
+      return 0
+    else
+      return 1
+    fi
+
+  elif [[ -z "$testing" ]]; then
+
+    if existingHash=$(fetchExistingHash "$commit"); then
+
+      if [[ -n "$first" ]]; then
+
+        nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+        if wantedHash=$(calcWantedHash "$commit" "$nixpkgsSha"); then
+          # If an image exists already, we compare the hash it has embedded to the one
+          # we calculated for the inputs we have. If they are the same, we don't need to
+          # update the image. If they're not the same, something changed and an update
+          # is needed
+          if [[ "$existingHash" != "$wantedHash" ]]; then
+            buildTestPushImage "$commit" "$nixpkgsSha" "$wantedHash"
+          else
+            echo "Image exists already, and it's the latest one, but the hash didn't change, so we don't update it" >&2
+          fi
+        fi
+      else
+        echo "Image exists already, and it's not the latest one, so we don't update it" >&2
+      fi
+
+    else
+
+      nixpkgsSha=$(nix-prefetch-url --unpack "https://github.com/NixOS/nixpkgs/archive/$commit.tar.gz")
+      if wantedHash=$(calcWantedHash "$commit" "$nixpkgsSha"); then
+        buildTestPushImage "$commit" "$nixpkgsSha" "$wantedHash"
+      fi
+
+    fi
+
+    echo "" >&2
+
+  fi
+
+
+
+}
+
+
+curl -sSf "https://channels.nix.gsc.io/$channel/history-v2" \
+  | tail -n"$count" \
+  | tac \
+  | while read -r entry; do
+    processEntry
+  done
+

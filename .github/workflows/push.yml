@@ -1,35 +1,28 @@
-name: Test & image update
+name: Image update
 on:
   push:
     branches:
       - master
+
   pull_request:
     branches:
       - master
 
+  schedule:
+    # Every hour at the 47th minute (randomly chosen)
+    - cron: '47 * * * *'
+
+  # Allow triggering manually from the Actions Tab
+  workflow_dispatch:
+
+
 jobs:
-  testing:
-    name: Run image tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v10
-      with:
-        skip_adding_nixpkgs_channel: true
-    - uses: cachix/cachix-action@v6
-      with:
-        name: nix-docker-base
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    - name: Build test runner
-      run: nix-build -A testRunner
-    - name: Run tests
-      run: ./result
   image-update:
-    name: Build and push image update
+    name: Update images
     runs-on: ubuntu-latest
-    needs: testing
-    # Only push image updates to DockerHub for master commits
-    if: github.event_name == 'push'
+    strategy:
+      matrix:
+        channel: [ "nixos-20.03", "nixos-unstable" ]
     steps:
     - uses: actions/checkout@v2
     - uses: cachix/install-nix-action@v10
@@ -39,10 +32,15 @@ jobs:
       with:
         name: nix-docker-base
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-    - name: Build updater
-      run: nix-build -A imageUpdater
-    - name: Running updater
+    - name: Running non-pushing updater
+      if: github.event_name == 'pull_request'
+      run: nix-shell --run 'scripts/image-update test "$PWD" ${{ matrix.channel }} 32'
+      env:
+        REGISTRY_USER: niteo
+    - name: Running pushing updater
+      # Only push image updates to DockerHub for master commits
+      if: github.event_name != 'pull_request'
+      run: nix-shell --run 'scripts/image-update push "$PWD" ${{ matrix.channel }} 32'
       env:
         REGISTRY_USER: niteo
         REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      run: ./result
