@@ -19,7 +19,7 @@ These dependencies notably come from the very nixpkgs version that is prefetched
 
 ### Automatic channel updates
 
-Every hour, the [Nixpkgs update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Nixpkgs+update%22) GitHub Actions workflow runs to detect any channel updates. If that's the case, an update commit is pushed to master, which triggers the [Image update](https://github.com/niteoweb/docker-nixpkgs/actions?query=workflow%3A%22Test+%26+image+update%22) workflow to build new images and push them to DockerHub.
+Every hour, [a GitHub Action](https://github.com/niteoweb/nix-docker-base/actions) runs to detect any nixpkgs channel updates, in which case a new Docker image is built and pushed to DockerHub with the corresponding tag.
 
 Additionally, if this repository changes how images are built, the image tags corresponding to the latest channel versions are updated to incorporate these changes. This is the only way in which tagged images are updated, meaning once a nixpkgs channel commit is outdated, its image won't get updated anymore. So if this repository receives an update, you need to update nixpkgs to the latest version of the channel.
 
@@ -42,7 +42,7 @@ fetchTarball {
 
 Note that choosing the name as `nixpkgs-src` is very important, because Nix can only reuse a prefetched version if the name matches.
 
-Only Nix channels specified in [nix/sources.json](./nix/sources.json) are available, but new ones may be added over time. Only commits after the addition of the channel are available, so there's no history of commits that goes past when the channel was added to this repository.
+Only Nix channels specified in channel matrix in the [push workflow](https://github.com/niteoweb/nix-docker-base/blob/master/.github/workflows/push.yml) are available, but new ones may be added over time.
 
 #### Using [Niv](https://github.com/nmattia/niv)
 
