@@ -46,11 +46,17 @@ let
 
   # Dynamic files in the filesystem root of the base image
   dynamicRootFiles = pkgs.runCommandNoCC "dynamic-root-files" {} ''
-    mkdir -p $out/run $out/usr/bin $out/bin
+    mkdir -p $out/run $out/usr/bin $out/bin $out/lib64
     cp -R -Ls ${env} $out/run/profile
     cp -R -Ls ${env}/etc $out/etc
     ln -s ${pkgs.coreutils}/bin/env $out/usr/bin/env
     ln -s ${pkgs.bashInteractive}/bin/sh $out/bin/sh
+
+    # So that this image can be used as a GitHub Action container directly
+    # Needed because it calls its own (non-nix-patched) node binary which uses
+    # this dynamic linker path. See also the LD_LIBRARY_PATH assignment below,
+    # which provides the necessary libraries for that binary
+    ln -s ${pkgs.glibc}/lib/ld-linux-x86-64.so.2 $out/lib64/ld-linux-x86-64.so.2
   '';
 
   # All contents of the root filesystem
@@ -115,6 +121,11 @@ in pkgs.dockerTools.buildImage {
       "USER=root"
       # Needed by some nix commands like nix-store to display output
       "PAGER=/run/profile/bin/less"
+      # By default, the linker added in dynamicRootFiles can only find glibc
+      # libraries, but the node binary from the GitHub Actions runner also
+      # depends on libstdc++.so.6, which is glibc/stdenv. Using LD_LIBRARY_PATH
+      # is the easiest way to inject this dependency
+      "LD_LIBRARY_PATH=${lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]}"
     ];
   } // lib.optionalAttrs (nixHash != null) {
     # Embed a nixHash into the image if given, allowing later extraction via skopeo inspect
