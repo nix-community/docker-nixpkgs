@@ -15,6 +15,8 @@ let
   inherit (pkgs) lib;
 
   exportProfile = pkgs.writeShellScriptBin "export-profile" (builtins.readFile ./scripts/export-profile);
+  startTmate = pkgs.writeShellScriptBin "start-tmate" (builtins.readFile ./scripts/start-tmate);
+  bashTmate = pkgs.writeShellScriptBin "bash-tmate" (builtins.readFile ./scripts/bash-tmate);
 
   # All packages available in the base image
   env = pkgs.buildEnv {
@@ -22,6 +24,9 @@ let
     paths = with pkgs; [
       # Custom things
       exportProfile
+      startTmate
+      bashTmate
+      tmate
 
       # Very basics
       coreutils

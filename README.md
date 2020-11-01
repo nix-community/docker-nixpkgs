@@ -153,6 +153,13 @@ rev=$(jq -r .nixpkgs.rev nix/sources.json)
 sed -i "s#FROM.*AS build#FROM niteo/nixpkgs-$channel:$rev AS build#g" Dockerfile
 ```
 
+### Connecting with SSH during CI
+
+This image has built-in helpers for setting up a tmate connection to the image, useful for debugging when running in CI:
+
+- `start-tmate [maxIdle]`: Starts a tmate session, which is persisted until `maxIdle` (by default 60) seconds pass without any connection. The command only exits once this has occured.
+- `bash-tmate`: A drop-in replacement for bash that runs `start-tmate` when the bash command fails. Useful as a shell for CI scripts, allowing debugging in case of failures.
+
 ## Development and Contributing
 
 This section is only intended for developers/contributors of this project. Feel free to contribute by opening a PR or open issues for enquiries.

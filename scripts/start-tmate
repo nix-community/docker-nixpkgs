@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dir=$(mktemp -d)
+sock=$dir/sock
+log=$dir/log
+
+interval=5
+maxIdle=${1:-60}
+
+echo "Starting tmate session"
+echo "Only stopping once $maxIdle seconds pass without any connections"
+
+tmate -S "$sock" -F new-session bash > "$log" &
+while ! tmate -S "$sock" wait tmate-ready 2>/dev/null; do
+  sleep 1;
+done
+
+trap '[[ -S "$sock" ]] && tmate -S "$sock" kill-server' EXIT
+
+idleSeconds=0
+while [[ -S "$sock" ]] && [[ "$idleSeconds" -le "$maxIdle" ]]; do
+
+  tmate -S "$sock" display -p '#{tmate_ssh}'
+
+  sleep "$interval"
+
+  clientCount=$(sed -n 's/.* \([0-9]\+\) client currently connected/\1/p' "$log" | tail -n1)
+  if [[ -z "$clientCount" ]] || [[ "$clientCount" -eq 0 ]]; then
+    idleSeconds=$(( idleSeconds + interval ))
+  else
+    idleSeconds=0
+  fi
+
+done
+
+echo "$maxIdle seconds passed without any connections, stopping tmate session"
