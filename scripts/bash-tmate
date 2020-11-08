@@ -3,6 +3,6 @@ bash "$@"
 exitCode=$?
 if [[ "$exitCode" -ne 0 ]]; then
   echo "Command failed ($exitCode): bash ${@@Q}"
-  echo start-tmate
+  start-tmate
   exit "$exitCode"
 fi
