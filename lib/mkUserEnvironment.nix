@@ -21,6 +21,36 @@
 # Supporting code
 with builtins;
 let
+  # Copied from https://github.com/nixos/nix/blob/e02481ded216ffb5b06b413e3695d4e11e62e02f/corepkgs/buildenv.nix
+  #
+  # This was available at <nix/buildenv.nix>, until it got removed in Nix.
+  buildenv = { derivations, manifest }:
+    derivation {
+      name = "user-environment";
+      system = "builtin";
+      builder = "builtin:buildenv";
+
+      inherit manifest;
+
+      # !!! grmbl, need structured data for passing this in a clean way.
+      derivations =
+        map
+          (d:
+            [
+              (d.meta.active or "true")
+              (d.meta.priority or 5)
+              (builtins.length d.outputs)
+            ] ++ map (output: builtins.getAttr output d) d.outputs)
+          derivations;
+
+      # Building user environments remotely just causes huge amounts of
+      # network traffic, so don't do that.
+      preferLocalBuild = true;
+
+      # Also don't bother substituting.
+      allowSubstitutes = false;
+    };
+
   # back-compat
   isPath = builtins.isPath or (x: builtins.typeOf x == "path");
 
@@ -68,14 +98,14 @@ let
 
       outs = lib.genAttrs outputs toOut;
     in
-      base // outs;
+    base // outs;
 
   writeManifest = derivations:
     writeText "env-manifest.nix" (
       toNix (map genManifest derivations)
     );
 in
-import <nix/buildenv.nix> {
+buildenv {
   inherit derivations;
   manifest = writeManifest derivations;
 }
