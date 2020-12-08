@@ -28,7 +28,7 @@ jobs:
     - uses: cachix/install-nix-action@v12
       with:
         skip_adding_nixpkgs_channel: true
-    - uses: cachix/cachix-action@v6
+    - uses: cachix/cachix-action@v8
       with:
         name: nix-docker-base
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
