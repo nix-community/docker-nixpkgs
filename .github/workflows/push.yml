@@ -25,7 +25,7 @@ jobs:
         channel: [ "nixos-20.03", "nixos-unstable" ]
     steps:
     - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v10
+    - uses: cachix/install-nix-action@v12
       with:
         skip_adding_nixpkgs_channel: true
     - uses: cachix/cachix-action@v6
