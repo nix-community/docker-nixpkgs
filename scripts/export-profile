@@ -25,7 +25,12 @@ mkdir -p "$(dirname "$targetProfile")"
 # Apparently Docker somehow deduplicates directory symlinks, causing problems
 # down the line. So instead of symlinking the directory directly, we symlink all
 # the files recursively instead. See below for the -Ls flags
-cp -R -Ls "$profile" "$targetProfile"
+#
+# This cp returns 1 if any symlink points to a non-existant destination, so we
+# ignore its exit code. This does unfortunately also ignore other errors
+# Note that it's not possible to just remove invalid symlinks, as Nix would complain about
+# a store path having changed contents in the nix-store --export later
+cp -R -Ls "$profile" "$targetProfile" || true
 
 # If the profile contains an etc directory, link all of its files to the roots /etc
 #
@@ -34,7 +39,8 @@ cp -R -Ls "$profile" "$targetProfile"
 # put in /etc
 if [[ -e "$profile"/etc ]]; then
   echo "Linking from $root/etc to $profile/etc" >&2
-  cp -R -Ls "$profile"/etc "$root"/etc
+  # See in above cp why the error is ignored
+  cp -R -Ls "$profile"/etc "$root"/etc || true
 fi
 
 # If the profile contains bin/env, link to that from /usr/bin/env for POSIX
