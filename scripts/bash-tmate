@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-bash "$@"
+bash -eo pipefail "$@"
 exitCode=$?
 if [[ "$exitCode" -ne 0 ]]; then
   echo "Command failed ($exitCode): bash ${@@Q}"
