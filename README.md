@@ -96,12 +96,6 @@ Then run `nix-build -A <image-name>` to test that it builds, and
 then use
 `docker load -i /nix/store/...<image-name>.tar.gz` to load and test the image.
 
-## Related projects
-
-The [docker-library](https://github.com/docker-library/official-images#readme)
-is an image set maintained by the Docker Inc. team and contain
-officially-supported images.
-
 ## User Feedback
 
 ### Issues
@@ -121,6 +115,10 @@ we are always thrilled to receive pull requests, and do our brest ot process
 them as fast as we can.
 
 ## Related projects
+
+* The [docker-library](https://github.com/docker-library/official-images#readme)
+  is an image set maintained by the Docker Inc. team and contain
+  officially-supported images.
 
 * [Nixery](https://nixery.dev/) is a pretty cool service that builds docker
   images from nixpkgs attributes on the fly.
