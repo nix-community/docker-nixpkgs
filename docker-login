@@ -5,9 +5,8 @@
 # Usage: ./docker-login <username> <password> [registry]
 set -euo pipefail
 
-username=$1
-password=$2
-registry=${3:-docker.io}
+auth=$1
+registry=${2:-docker.io}
 
 # Encode some funky docker heuristic
 if [[ $registry = *docker.io ]]; then
@@ -21,7 +20,7 @@ cat <<DOCKER_CONF > ~/.docker/config.json
 {
   "auths": {
     "$registry": {
-      "auth": "$(printf "%s:%s" "$username" "$password" | base64)"
+      "auth": "$(echo "$auth" | base64)"
     }
   }
 }

@@ -5,19 +5,22 @@ on:
       - master
   pull_request:
   workflow_dispatch:
+  schedule:
+    # Run once per day
+    - cron: '0 0 * * *'
 jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
-    runs-on: ${{ matrix.os }}
+        channel:
+          - nixos-unstable
+          - nixos-20.09
+          - nixos-20.03
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: cachix/install-nix-action@v12
-      - uses: cachix/cachix-action@v8
-        with:
-          name: nix-community
-          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-      - run: ./build
+      - run: nix-shell --run ./ci.sh
         env:
-          - NIX_PATH=channel:nixos-unstable
+          CI_REGISTRY_AUTH: '${{ secrets.REGISTRY_AUTH }}'
+          NIXPKGS_CHANNEL: '${{ matrix.channel }}'
