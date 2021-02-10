@@ -29,24 +29,6 @@ $ docker run -ti --rm nixpkgs/curl curl http://ifconfig.co
 180.52.248.114
 ```
 
-## List of images
-
-Here is the current list of images that are provided. Missing one? Send an
-[image request](#image-request).
-
-| Image           | Description           |
-| ---             | ---                   |
-| bash            | CLI only              |
-| couchpotato     | CLI only              |
-| busybox         | CLI only              |
-| curl            | CLI only              |
-| docker-compose  | CLI only              |
-| kubectl         | CLI only              |
-| kubernetes-helm | CLI only              |
-| nginx           | CLI only              |
-| nix             | nix with deps         |
-| nix-unstable    | nixUnstable with deps |
-
 ## Channels
 
 Each image is built with the following nixpkgs channels and map to the
@@ -58,34 +40,38 @@ nixpkgs channel describes.
 | Channel        | Image Tag   | Description                                       |
 | ---            | ---         | ---                                               |
 | nixos-unstable | latest      | latest and greated, major versions might change   |
+| nixos-20.09    | nixos-20.09 | only minor versions that include security updates |
 | nixos-20.03    | nixos-20.03 | only minor versions that include security updates |
 
-## Docker Hub
+## List of images
+
+Here is the current list of images that are provided. Missing one? Send an
+[image request](#image-request).
+
+### Docker hub
 
 All images are automatically built and pushed to Docker Hub.
 
-### Image matrix
-
 `> ./dockerhub-image-matrix`
 <!-- BEGIN mdsh -->
-| Image / Tag | latest | nixos-20.03 |
-| ---         | ---    | ---         |
-| [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash) | [![](https://images.microbadger.com/badges/image/nixpkgs/bash.svg)](https://microbadger.com/images/nixpkgs/bash) | [![](https://images.microbadger.com/badges/image/nixpkgs/bash:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/bash:nixos-20.03) |
-| [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox) | [![](https://images.microbadger.com/badges/image/nixpkgs/busybox.svg)](https://microbadger.com/images/nixpkgs/busybox) | [![](https://images.microbadger.com/badges/image/nixpkgs/busybox:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/busybox:nixos-20.03) |
-| [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix.svg)](https://microbadger.com/images/nixpkgs/cachix) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/cachix:nixos-20.03) |
-| [nixpkgs/cachix-flakes](https://hub.docker.com/r/nixpkgs/cachix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix-flakes.svg)](https://microbadger.com/images/nixpkgs/cachix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix-flakes:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/cachix-flakes:nixos-20.03) |
-| [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy) | [![](https://images.microbadger.com/badges/image/nixpkgs/caddy.svg)](https://microbadger.com/images/nixpkgs/caddy) | [![](https://images.microbadger.com/badges/image/nixpkgs/caddy:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/caddy:nixos-20.03) |
-| [nixpkgs/couchpotato](https://hub.docker.com/r/nixpkgs/couchpotato) | [![](https://images.microbadger.com/badges/image/nixpkgs/couchpotato.svg)](https://microbadger.com/images/nixpkgs/couchpotato) | [![](https://images.microbadger.com/badges/image/nixpkgs/couchpotato:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/couchpotato:nixos-20.03) |
-| [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl) | [![](https://images.microbadger.com/badges/image/nixpkgs/curl.svg)](https://microbadger.com/images/nixpkgs/curl) | [![](https://images.microbadger.com/badges/image/nixpkgs/curl:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/curl:nixos-20.03) |
-| [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer) | [![](https://images.microbadger.com/badges/image/nixpkgs/devcontainer.svg)](https://microbadger.com/images/nixpkgs/devcontainer) | [![](https://images.microbadger.com/badges/image/nixpkgs/devcontainer:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/devcontainer:nixos-20.03) |
-| [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose) | [![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose.svg)](https://microbadger.com/images/nixpkgs/docker-compose) | [![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/docker-compose:nixos-20.03) |
-| [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo) | [![](https://images.microbadger.com/badges/image/nixpkgs/hugo.svg)](https://microbadger.com/images/nixpkgs/hugo) | [![](https://images.microbadger.com/badges/image/nixpkgs/hugo:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/hugo:nixos-20.03) |
-| [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubectl.svg)](https://microbadger.com/images/nixpkgs/kubectl) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubectl:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/kubectl:nixos-20.03) |
-| [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm.svg)](https://microbadger.com/images/nixpkgs/kubernetes-helm) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/kubernetes-helm:nixos-20.03) |
-| [nixpkgs/nginx](https://hub.docker.com/r/nixpkgs/nginx) | [![](https://images.microbadger.com/badges/image/nixpkgs/nginx.svg)](https://microbadger.com/images/nixpkgs/nginx) | [![](https://images.microbadger.com/badges/image/nixpkgs/nginx:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nginx:nixos-20.03) |
-| [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg)](https://microbadger.com/images/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix:nixos-20.03) |
-| [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-flakes.svg)](https://microbadger.com/images/nixpkgs/nix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-flakes:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix-flakes:nixos-20.03) |
-| [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg)](https://microbadger.com/images/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix-unstable:nixos-20.03) |
+| Image / Tag | latest | nixos-20.09 | nixos-20.03 |
+| ---         | ---    | ---         | ---         |
+| [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash) | [![](https://images.microbadger.com/badges/image/nixpkgs/bash.svg)](https://microbadger.com/images/nixpkgs/bash) | [![](https://images.microbadger.com/badges/image/nixpkgs/bash:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/bash:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/bash:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/bash:nixos-20.03) |
+| [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox) | [![](https://images.microbadger.com/badges/image/nixpkgs/busybox.svg)](https://microbadger.com/images/nixpkgs/busybox) | [![](https://images.microbadger.com/badges/image/nixpkgs/busybox:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/busybox:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/busybox:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/busybox:nixos-20.03) |
+| [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix.svg)](https://microbadger.com/images/nixpkgs/cachix) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/cachix:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/cachix:nixos-20.03) |
+| [nixpkgs/cachix-flakes](https://hub.docker.com/r/nixpkgs/cachix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix-flakes.svg)](https://microbadger.com/images/nixpkgs/cachix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix-flakes:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/cachix-flakes:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/cachix-flakes:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/cachix-flakes:nixos-20.03) |
+| [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy) | [![](https://images.microbadger.com/badges/image/nixpkgs/caddy.svg)](https://microbadger.com/images/nixpkgs/caddy) | [![](https://images.microbadger.com/badges/image/nixpkgs/caddy:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/caddy:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/caddy:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/caddy:nixos-20.03) |
+| [nixpkgs/couchpotato](https://hub.docker.com/r/nixpkgs/couchpotato) | [![](https://images.microbadger.com/badges/image/nixpkgs/couchpotato.svg)](https://microbadger.com/images/nixpkgs/couchpotato) | [![](https://images.microbadger.com/badges/image/nixpkgs/couchpotato:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/couchpotato:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/couchpotato:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/couchpotato:nixos-20.03) |
+| [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl) | [![](https://images.microbadger.com/badges/image/nixpkgs/curl.svg)](https://microbadger.com/images/nixpkgs/curl) | [![](https://images.microbadger.com/badges/image/nixpkgs/curl:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/curl:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/curl:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/curl:nixos-20.03) |
+| [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer) | [![](https://images.microbadger.com/badges/image/nixpkgs/devcontainer.svg)](https://microbadger.com/images/nixpkgs/devcontainer) | [![](https://images.microbadger.com/badges/image/nixpkgs/devcontainer:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/devcontainer:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/devcontainer:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/devcontainer:nixos-20.03) |
+| [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose) | [![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose.svg)](https://microbadger.com/images/nixpkgs/docker-compose) | [![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/docker-compose:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/docker-compose:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/docker-compose:nixos-20.03) |
+| [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo) | [![](https://images.microbadger.com/badges/image/nixpkgs/hugo.svg)](https://microbadger.com/images/nixpkgs/hugo) | [![](https://images.microbadger.com/badges/image/nixpkgs/hugo:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/hugo:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/hugo:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/hugo:nixos-20.03) |
+| [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubectl.svg)](https://microbadger.com/images/nixpkgs/kubectl) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubectl:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/kubectl:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubectl:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/kubectl:nixos-20.03) |
+| [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm.svg)](https://microbadger.com/images/nixpkgs/kubernetes-helm) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/kubernetes-helm:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/kubernetes-helm:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/kubernetes-helm:nixos-20.03) |
+| [nixpkgs/nginx](https://hub.docker.com/r/nixpkgs/nginx) | [![](https://images.microbadger.com/badges/image/nixpkgs/nginx.svg)](https://microbadger.com/images/nixpkgs/nginx) | [![](https://images.microbadger.com/badges/image/nixpkgs/nginx:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/nginx:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nginx:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nginx:nixos-20.03) |
+| [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix.svg)](https://microbadger.com/images/nixpkgs/nix) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/nix:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix:nixos-20.03) |
+| [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-flakes.svg)](https://microbadger.com/images/nixpkgs/nix-flakes) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-flakes:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/nix-flakes:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-flakes:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix-flakes:nixos-20.03) |
+| [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable.svg)](https://microbadger.com/images/nixpkgs/nix-unstable) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-20.09.svg)](https://microbadger.com/images/nixpkgs/nix-unstable:nixos-20.09) | [![](https://images.microbadger.com/badges/image/nixpkgs/nix-unstable:nixos-20.03.svg)](https://microbadger.com/images/nixpkgs/nix-unstable:nixos-20.03) |
 <!-- END mdsh -->
 ## Adding new images
 
@@ -111,7 +97,7 @@ with an accompanying use-case for an image that you would like to see.
 ### Contributing
 
 You are invited to contribute new features, fixes or updates, large or small;
-we are always thrilled to receive pull requests, and do our brest ot process
+we are always thrilled to receive pull requests, and do our best to process
 them as fast as we can.
 
 ## Related projects
@@ -125,6 +111,6 @@ them as fast as we can.
 
 ## License
 
-Copyright (c) 2019 zimbatm and contributors.
+Copyright (c) 2021 @zimbatm and contributors.
 
 Licensed under the MIT.
