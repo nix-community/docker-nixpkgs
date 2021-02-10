@@ -14,7 +14,7 @@ if [[ $registry = *docker.io ]]; then
   registry=https://index.docker.io/v2/
 fi
 
-mkdir ~/.docker
+mkdir -p ~/.docker
 
 cat <<DOCKER_CONF > ~/.docker/config.json
 {
