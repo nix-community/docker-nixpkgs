@@ -16,7 +16,7 @@ for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   src=docker-archive://$file
   dst=docker://$registry/$image_prefix/$attr:$image_tag
   echo "--- attr=$attr src=$src dst=$dst"
-  skopeo copy "$src" "$dst"
+  skopeo copy --insecure-policy "$src" "$dst"
 done
 
 echo OK
