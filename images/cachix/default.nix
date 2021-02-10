@@ -4,7 +4,7 @@
 }:
 (docker-nixpkgs.nix.override {
   nix = nix;
-  extraContents = [ cachix ];
+  extraContents = [ cachix gnugrep ];
 }).overrideAttrs (prev: {
   meta = (prev.meta or {}) // {
     description = "Nix and Cachix image";
