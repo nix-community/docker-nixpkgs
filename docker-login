@@ -20,7 +20,7 @@ cat <<DOCKER_CONF > ~/.docker/config.json
 {
   "auths": {
     "$registry": {
-      "auth": "$(echo "$auth" | base64)"
+      "auth": "$(echo -n "$auth" | base64)"
     }
   }
 }
