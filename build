@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-# build *all* the docker images
-exec nix-build \
-  --no-out-link \
-  --option sandbox true \
-  "$@"

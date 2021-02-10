@@ -6,10 +6,8 @@
 # Usage: ./dockerhub-metadata <user> <password> [org]
 set -euo pipefail
 
-username=$1
-password=$2
-org=${3:-nixpkgs}
-user=$username:$password
+user=$1
+org=${2:-nixpkgs}
 
 nix_eval() {
   nix-instantiate --strict --eval --json "$@"
