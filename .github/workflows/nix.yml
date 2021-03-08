@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     strategy:
+      # Keep building the other channels if one fails
+      fail-fast: false
       matrix:
         channel:
           - nixos-unstable
