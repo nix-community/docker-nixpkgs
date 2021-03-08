@@ -5,7 +5,7 @@
 { drv # derivation to build the image for
   # Name of the binary to run by default
 , binName ? (builtins.parseDrvName drv.name).name
-, extraContents ? []
+, extraContents ? [ ]
 , meta ? drv.meta
 }:
 let

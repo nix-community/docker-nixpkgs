@@ -25,7 +25,7 @@
 , mkUserEnvironment
 }:
 let
-  channel = builtins.getEnv("NIXPKGS_CHANNEL");
+  channel = builtins.getEnv ("NIXPKGS_CHANNEL");
 
   # generate a user profile for the image
   profile = mkUserEnvironment {

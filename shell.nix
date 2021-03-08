@@ -1,6 +1,6 @@
 let
   nixpkgs = builtins.fetchTarball "channel:nixos-20.09";
-  pkgs = import nixpkgs { config = {}; overlays = []; };
+  pkgs = import nixpkgs { config = { }; overlays = [ ]; };
 in
 with pkgs;
 mkShell {

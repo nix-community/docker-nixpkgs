@@ -10,7 +10,7 @@
 , nix
 , openssh
 , xz
-, extraContents ? []
+, extraContents ? [ ]
 }:
 let
   image = dockerTools.buildImageWithNixDb {

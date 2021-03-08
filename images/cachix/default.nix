@@ -6,7 +6,7 @@
   nix = nix;
   extraContents = [ cachix ];
 }).overrideAttrs (prev: {
-  meta = (prev.meta or {}) // {
+  meta = (prev.meta or { }) // {
     description = "Nix and Cachix image";
   };
 })

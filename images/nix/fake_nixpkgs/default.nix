@@ -1,10 +1,10 @@
 _:
 throw ''
-This container doesn't include nixpkgs.
+  This container doesn't include nixpkgs.
 
-The best way to work around that is to pin your dependencies. See
-  https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
+  The best way to work around that is to pin your dependencies. See
+    https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
 
-Or if you must, override the NIX_PATH environment variable with eg:
-  "NIX_PATH=nixpkgs=channel:nixos-unstable"
+  Or if you must, override the NIX_PATH environment variable with eg:
+    "NIX_PATH=nixpkgs=channel:nixos-unstable"
 ''
