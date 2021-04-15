@@ -39,7 +39,7 @@ nixpkgs channel describes.
 
 | Channel        | Image Tag   | Description                                       |
 | ---            | ---         | ---                                               |
-| nixos-unstable | latest      | latest and greated, major versions might change   |
+| nixos-unstable | latest      | latest and greatest, major versions might change   |
 | nixos-20.09    | nixos-20.09 | only minor versions that include security updates |
 | nixos-20.03    | nixos-20.03 | only minor versions that include security updates |
 
