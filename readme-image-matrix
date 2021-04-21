@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Usage: ./dockerhub-image-matrix
+set -euo pipefail
+
+## Main ##
+
+releases_json=$(nix-instantiate --strict --eval --json)
+
+echo "| Image / Tag | Pull |"
+echo "| ---         | ---  |"
+
+for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
+  name=nixpkgs/$attr
+  echo -n "| [$name](https://hub.docker.com/r/$name)"
+  echo -n "| \`docker pull docker.nix-community.org/$name\` "
+  echo "|"
+done
