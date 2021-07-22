@@ -1,23 +1,15 @@
-image: nixpkgs/nix:nixos-20.03
-
 stages:
   - build
 
-nixos-unstable:
+build:
   stage: build
+  image: nixpkgs/nix:nixos-20.03
   script: nix-shell --run ./ci.sh
-  variables:
-    NIXPKGS_CHANNEL: nixos-unstable
-    IMAGE_TAG: latest
-
-nixos-20.03:
-  stage: build
-  script: nix-shell --run ./ci.sh
-  variables:
-    NIXPKGS_CHANNEL: nixos-20.03
-
-nixos-20.09:
-  stage: build
-  script: nix-shell --run ./ci.sh
-  variables:
-    NIXPKGS_CHANNEL: nixos-20.09
+  parallel:
+    matrix:
+      - NIXPKGS_CHANNEL: nixos-unstable
+        IMAGE_TAG: latest
+      - NIXPKGS_CHANNEL:
+          - nixos-20.03
+          - nixos-20.09
+          - nixos-21.05
