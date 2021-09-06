@@ -18,6 +18,7 @@ jobs:
           - nixos-unstable
           - nixos-20.09
           - nixos-20.03
+          - nixos-21.05
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
