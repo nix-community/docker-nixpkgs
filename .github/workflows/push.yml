@@ -24,12 +24,11 @@ jobs:
       matrix:
         channel: [ "nixos-21.05", "nixos-20.09", "nixos-unstable" ]
     steps:
-    - uses: actions/checkout@v2
-    - uses: cachix/install-nix-action@v12
+    - uses: actions/checkout@v2.4.0
+    - uses: cachix/install-nix-action@v14.1
       with:
-        install_url: https://releases.nixos.org/nix/nix-2.3.15/install
         skip_adding_nixpkgs_channel: true
-    - uses: cachix/cachix-action@v8
+    - uses: cachix/cachix-action@v10
       with:
         name: nix-docker-base
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
