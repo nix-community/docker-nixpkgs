@@ -1,6 +1,7 @@
 { docker-nixpkgs
 , nixFlakes
 , writeTextFile
+, extraContents ? [ ]
 }:
 docker-nixpkgs.nix.override {
   nix = nixFlakes;
@@ -12,5 +13,5 @@ docker-nixpkgs.nix.override {
         experimental-features = nix-command flakes
       '';
     })
-  ];
+  ] ++ extraContents;
 }
