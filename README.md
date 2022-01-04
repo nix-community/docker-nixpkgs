@@ -61,7 +61,6 @@ on our custom domain, courtesy of [Scarf](https://scarf.sh).
 | [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix)| `docker pull docker.nix-community.org/nixpkgs/cachix` |
 | [nixpkgs/cachix-flakes](https://hub.docker.com/r/nixpkgs/cachix-flakes)| `docker pull docker.nix-community.org/nixpkgs/cachix-flakes` |
 | [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy)| `docker pull docker.nix-community.org/nixpkgs/caddy` |
-| [nixpkgs/couchpotato](https://hub.docker.com/r/nixpkgs/couchpotato)| `docker pull docker.nix-community.org/nixpkgs/couchpotato` |
 | [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl)| `docker pull docker.nix-community.org/nixpkgs/curl` |
 | [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer)| `docker pull docker.nix-community.org/nixpkgs/devcontainer` |
 | [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose)| `docker pull docker.nix-community.org/nixpkgs/docker-compose` |
