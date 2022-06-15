@@ -1,5 +1,5 @@
 let
-  nixpkgs = builtins.fetchTarball "channel:nixos-20.09";
+  nixpkgs = builtins.fetchTarball "channel:nixos-22.05";
   pkgs = import nixpkgs { config = { }; overlays = [ ]; };
 in
 with pkgs;
