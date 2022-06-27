@@ -5,6 +5,7 @@ in
 with pkgs;
 mkShell {
   buildInputs = [
+    dive
     jq
     skopeo
   ] ++ lib.optional (pkgs ? mdsh) pkgs.mdsh;
@@ -12,5 +13,7 @@ mkShell {
   shellHook = ''
     # try to work aroud build issues
     unset TMPDIR
+
+    export NIX_PATH=nixpkgs=${toString nixpkgs}
   '';
 }
