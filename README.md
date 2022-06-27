@@ -71,6 +71,7 @@ on our custom domain, courtesy of [Scarf](https://scarf.sh).
 | [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix)| `docker pull docker.nix-community.org/nixpkgs/nix` |
 | [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes)| `docker pull docker.nix-community.org/nixpkgs/nix-flakes` |
 | [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable` |
+| [nixpkgs/nix-unstable-static](https://hub.docker.com/r/nixpkgs/nix-unstable-static)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable-static` |
 <!-- END mdsh -->
 ## Adding new images
 
