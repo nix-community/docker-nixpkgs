@@ -13,5 +13,7 @@ mkShell {
   shellHook = ''
     # try to work aroud build issues
     unset TMPDIR
+
+    export NIX_PATH=nixpkgs=${toString nixpkgs}
   '';
 }
