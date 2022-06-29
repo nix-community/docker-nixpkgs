@@ -6,3 +6,11 @@ into /bin.
 
 The main use-case is to be able to run nix in the container, but share the
 `/nix/store` with the host.
+
+## Using the container with the host store
+
+This folder ships with a complementary script that you can use to run the
+image as the current user and the host /nix/store.
+
+Usage: `docker-nix-user.sh [<command> ...<args>]`
+
