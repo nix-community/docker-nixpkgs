@@ -84,6 +84,13 @@ let
     mkdir -p libexec/nix
     ln -s /bin/nix libexec/nix/build-remote
 
+    # Enable flakes
+    mkdir -p etc/nix
+    cat <<NIX_CONFIG > etc/nix/nix.conf
+    accept-flake-config = true
+    experimental-features = nix-command flakes
+    NIX_CONFIG
+
     # Add run-as-user script
     cp -a ${./run_as_user.sh} run_as_user.sh
   '';
