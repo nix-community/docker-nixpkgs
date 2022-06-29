@@ -9,11 +9,13 @@
 }:
 let
   inherit (pkgsStatic)
-    bash
+    bashInteractive
     busybox
     cacert
     openssl
     ;
+
+  bash = bashInteractive;
 
   # Get nix from Hydra because the nixpkgs one is not fully static
   nixStaticBin = fetchurl {
