@@ -61,6 +61,9 @@ let
     # Make sure /tmp has the right permissions
     chmod 1777 tmp
 
+    # Add user home folder
+    mkdir home
+
     # Add SSL CA certs
     cp -a "${cacert}/etc/ssl/certs/ca-bundle.crt" etc/ssl/certs/ca-bundle.crt
 
@@ -80,6 +83,9 @@ let
     done
     mkdir -p libexec/nix
     ln -s /bin/nix libexec/nix/build-remote
+
+    # Add run-as-user script
+    cp -a ${./run_as_user.sh} run_as_user.sh
   '';
 
   # To debug
