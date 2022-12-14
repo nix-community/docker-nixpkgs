@@ -19,7 +19,7 @@ jobs:
           - nixos-21.11
           - nixos-22.05
           - nixos-22.11
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v18
