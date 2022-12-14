@@ -3,13 +3,12 @@ stages:
 
 build:
   stage: build
-  image: nixpkgs/nix:nixos-21.11
+  image: nixpkgs/nix:nixos-22.05
   script: nix-shell --run ./ci.sh
   parallel:
     matrix:
       - NIXPKGS_CHANNEL: nixos-unstable
         IMAGE_TAG: latest
       - NIXPKGS_CHANNEL:
-          - nixos-21.05
-          - nixos-21.11
           - nixos-22.05
+          - nixos-22.11
