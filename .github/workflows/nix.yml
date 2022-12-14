@@ -16,7 +16,6 @@ jobs:
       matrix:
         channel:
           - nixos-unstable
-          - nixos-21.11
           - nixos-22.05
           - nixos-22.11
     runs-on: ubuntu-latest

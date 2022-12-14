@@ -10,6 +10,5 @@ build:
       - NIXPKGS_CHANNEL: nixos-unstable
         IMAGE_TAG: latest
       - NIXPKGS_CHANNEL:
-          - nixos-21.11
           - nixos-22.05
           - nixos-22.11
