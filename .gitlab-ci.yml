@@ -3,7 +3,7 @@ stages:
 
 build:
   stage: build
-  image: nixpkgs/nix:nixos-21.11
+  image: nixpkgs/nix:nixos-22.05
   script: nix-shell --run ./ci.sh
   parallel:
     matrix:
