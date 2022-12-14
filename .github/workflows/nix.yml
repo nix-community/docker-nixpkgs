@@ -18,7 +18,7 @@ jobs:
           - nixos-unstable
           - nixos-22.05
           - nixos-22.11
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v18
