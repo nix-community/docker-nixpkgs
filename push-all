@@ -3,7 +3,7 @@
 # Usage: ./push-all <registry> <image-prefix> <image-tag>
 set -euo pipefail
 
-registry=${1:-docker.io}
+registry=${1:-ghcr.io}
 image_prefix=${2:-nixpkgs}
 image_tag=${3:-latest}
 

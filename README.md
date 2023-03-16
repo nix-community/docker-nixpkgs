@@ -1,5 +1,9 @@
 # docker-nixpkgs: docker images from nixpkgs
 
+> Docker recently requested that we start paying $420.-/year in order to keep
+> the organization. So we moved the images to GitHub. Sorry for the
+> inconvenience.
+
 This project is a collection of docker images automatically produced with Nix
 and the latest nixpkgs package set. All the images are refreshed daily with
 the latest versions of nixpkgs.
