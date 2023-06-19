@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v20
+      - uses: cachix/install-nix-action@v22
       - run: nix-shell --run ./ci.sh
         env:
           CI_REGISTRY_AUTH: '${{ secrets.REGISTRY_AUTH }}'
