@@ -55,7 +55,12 @@ let
       shadow
 
       # for the vscode extension
-      gcc-unwrapped
+
+      # HACK: don't include the "libgcc" output. It has overlapping files with
+      #       the "lib" output, and that breaks the build.
+      (gcc-unwrapped // {
+        outputs = builtins.filter (x: x != "libgcc") gcc-unwrapped.outputs;
+      })
       iproute
     ];
   };
