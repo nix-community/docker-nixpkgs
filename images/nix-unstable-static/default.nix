@@ -11,9 +11,7 @@ let
   inherit (pkgsStatic)
     bashInteractive
     busybox
-    cacert
-    openssl
-    ;
+    cacert;
 
   bash = bashInteractive;
 
