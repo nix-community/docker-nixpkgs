@@ -18,8 +18,8 @@ let
 
   # Get nix from Hydra because the nixpkgs one is not fully static
   nixStaticBin = fetchurl {
-    url = "https://hydra.nixos.org/build/181573550/download/1/nix";
-    hash = "sha256-zO2xJhQIrLtL/ReTlcorjwsaTO1W5Rnr+sXwcLcujok=";
+    url = "https://hydra.nixos.org/build/228458395/download/1/nix";
+    hash = "sha256-H361lUdMpBpBVwInBmpAXKAwjPIf740Jg9Nht0NV66s=";
   };
 
   nixSymlinks = [
