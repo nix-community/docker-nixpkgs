@@ -6,6 +6,7 @@
 , python3
 , removeReferencesTo
 , runCommand
+, buildPackages
 }:
 let
   inherit (pkgsStatic)
@@ -61,6 +62,11 @@ let
 
     # Add user home folder
     mkdir home
+
+    # Create an unpriveleged user that we can use also without the run-as-user.sh script
+    chmod +w $PWD/etc/group $PWD/etc/passwd
+    ${buildPackages.shadow}/bin/groupadd --prefix $PWD -g 9000 nixuser
+    ${buildPackages.shadow}/bin/useradd --prefix $PWD -m -d /tmp -u 9000 -g 9000 -G nixuser nixuser
 
     # Add SSL CA certs
     cp -a "${cacert}/etc/ssl/certs/ca-bundle.crt" etc/ssl/certs/ca-bundle.crt
