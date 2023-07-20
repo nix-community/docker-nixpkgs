@@ -121,7 +121,8 @@ let
       Env = [
         "NIX_BUILD_SHELL=/bin/bash"
         "PAGER=cat"
-        "PATH=/bin"
+        # /host/bin can be used to extend the image with additional binaries
+        "PATH=/bin:/host/bin"
         "SSL_CERT_FILE=/etc/ssl/certs/ca-bundle.crt"
       ];
     };
