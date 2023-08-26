@@ -20,18 +20,33 @@
             inherit system;
             overlays = [
               (import ./overlay.nix)
+              (final: prev: {
+                flakeParameters = {
+                  nixpkgsChannel = "nixos-unstable";
+                };
+              })
             ];
           };
           pkgs-23-05 = import nixpkgs-23-05 {
             inherit system;
             overlays = [
               (import ./overlay.nix)
+              (final: prev: {
+                flakeParameters = {
+                  nixpkgsChannel = "nixos-23.05";
+                };
+              })
             ];
           };
           pkgs-22-11 = import nixpkgs-22-11 {
             inherit system;
             overlays = [
               (import ./overlay.nix)
+              (final: prev: {
+                flakeParameters = {
+                  nixpkgsChannel = "nixos-22.11";
+                };
+              })
             ];
           };
         in

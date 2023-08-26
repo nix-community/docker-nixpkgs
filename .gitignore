@@ -3,3 +3,4 @@ result
 result-*
 
 .direnv
+.local.envrc
