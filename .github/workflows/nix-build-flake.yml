@@ -1,0 +1,113 @@
+name: Nix Build
+on:
+  push:
+    branches:
+    - master
+    # for testing at the moment
+    - flake
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Run once per day
+    - cron: '0 0 * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nix_system:
+          - "x86_64-linux"
+          - "aarch64-linux"
+        nix_channel:
+          - "nixos-unstable"
+          - "nixos-22.11"
+          - "nixos-23.05"
+        target_image:
+          - bash
+          # - busybox
+          # - cachix
+          # - cachix-flakes
+          # - caddy
+          # - curl
+          # - devcontainer
+          # - docker-compose
+          # - hugo
+          # - kubectl
+          # - kubernetes-helm
+          # - nginx
+          # - nix
+          # - nix-flakes
+          # - nix-unstable
+          # - nix-unstable-static
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - uses: cachix/install-nix-action@v22
+        with:
+          nix_path: nixpkgs=channel:${{matrix.nix_channel}}
+          extra_nix_config: |
+            filter-syscalls = false
+            experimental-features = nix-command flakes
+            extra-platforms = aarch64-linux
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: Nix Build Base Images
+        run: |
+          nix build '.#docker-nixpkgs.${{matrix.nix_system}}."${{matrix.nix_channel}}".${{matrix.target_image}}'
+      - name: Login to Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Load to local registry and retag
+        run: |
+          export derivation_name=$(nix derivation show '.#docker-nixpkgs.${{matrix.nix_system}}."${{matrix.nix_channel}}".${{matrix.target_image}}' | jq '.[].outputs.out.path' -r)
+          export tag=$(cat $derivation_name | docker load | awk '{print $3}')
+          export image_prefix=ghcr.io/${{github.actor}}/${{secrets.CI_PROJECT_PATH}}/${{matrix.target_image}}
+          docker tag $tag $image_prefix:${{matrix.nix_channel}}--${{matrix.nix_system}}
+          docker push $image_prefix:${{matrix.nix_channel}}--${{matrix.nix_system}}
+  manifests-create:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        nix_channel:
+          - "nixos-unstable"
+          - "nixos-22.11"
+          - "nixos-23.05"
+        target_image:
+          - bash
+          # - busybox
+          # - cachix
+          # - cachix-flakes
+          # - caddy
+          # - curl
+          # - devcontainer
+          # - docker-compose
+          # - hugo
+          # - kubectl
+          # - kubernetes-helm
+          # - nginx
+          # - nix
+          # - nix-flakes
+          # - nix-unstable
+          # - nix-unstable-static
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login to Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create manifests
+        run: |
+          export image_prefix=ghcr.io/${{github.actor}}/${{secrets.CI_PROJECT_PATH}}/${{matrix.target_image}}
+          docker manifest create $image_prefix:${{matrix.nix_channel}} \
+            --amend $image_prefix:${{matrix.nix_channel}}--x86_64-linux \
+            --amend $image_prefix:${{matrix.nix_channel}}--aarch64-linux
+          docker manifest push $image_prefix:${{matrix.nix_channel}}
