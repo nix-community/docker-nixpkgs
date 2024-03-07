@@ -8,6 +8,7 @@ mkShell {
     dive
     jq
     skopeo
+    podman
   ] ++ lib.optional (pkgs ? mdsh) pkgs.mdsh;
 
   shellHook = ''

@@ -15,7 +15,7 @@ echo "=== Pushing images to $registry"
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   file=$(echo "$releases_json" | jq -r ".\"$attr\"")
   src=docker-archive://$file
-  dst=docker://$registry/$image_prefix/$attr:$image_tag
+  dst=docker://$registry/$image_prefix/$attr:${image_tag}-${system_name}
   echo "--- attr=$attr src=$src dst=$dst"
   skopeo copy --insecure-policy "$src" "$dst"
 done
