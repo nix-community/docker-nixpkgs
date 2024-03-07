@@ -1,3 +1,6 @@
 # Nix
 result
 result-*
+
+.direnv
+.local.envrc

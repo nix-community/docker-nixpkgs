@@ -6,6 +6,7 @@
 , coreutils
 , curl
 , direnv
+, flakeParameters
 , gcc-unwrapped
 , gitReallyMinimal
 , glibc
@@ -21,11 +22,12 @@
 , openssh
 , procps
 , shadow
+, stdenv
 , xz
 , mkUserEnvironment
 }:
 let
-  channel = builtins.getEnv ("NIXPKGS_CHANNEL");
+  channel = flakeParameters.nixpkgsChannel;
 
   # generate a user profile for the image
   profile = mkUserEnvironment {
@@ -68,7 +70,7 @@ let
   image = dockerTools.buildImage {
     name = "devcontainer";
 
-    contents = [ ];
+    # contents = [ ];
 
     extraCommands = ''
       # create the Nix DB
@@ -99,14 +101,25 @@ let
       # make sure /tmp exists
       mkdir -m 0777 tmp
 
-      # allow ubuntu ELF binaries to run. VSCode copies it's own.
-      mkdir -p lib64
-      ln -s ${glibc}/lib64/ld-linux-x86-64.so.2 lib64/ld-linux-x86-64.so.2
-
       # VSCode assumes that /sbin/ip exists
       mkdir sbin
       ln -s /nix/var/nix/profiles/default/bin/ip sbin/ip
-    '';
+    '' + (if stdenv.hostPlatform.isAarch64 then ''
+      # ld-linux-aarch64.so.1 is needed by vscode-server's in arm architecture
+      mkdir -p lib
+      ln -s "${glibc}/lib/ld-linux-aarch64.so.1" lib/ld-linux-aarch64.so.1
+      ln -s "${glibc}/lib/ld-linux-aarch64.so.1" lib/ld-linux.so.1
+      ln -sf "${stdenv.cc.cc.lib}/lib/libstdc++.so.6" lib/libstdc++.so.6
+    '' else ""
+      ) + (if stdenv.hostPlatform.isx86_64 then ''
+      # allow ubuntu ELF binaries to run. VSCode copies it's own.
+      mkdir -p lib64
+      ln -s ${glibc}/lib64/ld-linux-x86-64.so.2 lib64/ld-linux-x86-64.so.2
+      # ld-linux-x86-64.so.2 is needed by vscode-server's nodejs in case it install 32 bit nodejs
+      ln -s "${glibc}/lib64/ld-linux-x86-64.so.2" lib64/ld-linux.so.2
+      ln -sf "${stdenv.cc.cc.lib}/lib64/libstdc++.so.6" lib64/libstdc++.so.6
+    '' else ""
+      );
 
     config = {
       Cmd = [ "/nix/var/nix/profiles/default/bin/bash" ];
