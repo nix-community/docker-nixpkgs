@@ -8,9 +8,10 @@ set -euo pipefail
 
 user=$1
 org=${2:-nixpkgs}
+system_name=${NIX_SYSTEM_NAME:-x86_64-linux}
 
 nix_eval() {
-  nix-instantiate --strict --eval --json "$@"
+  nix-instantiate --strict --eval --argstr system "$system_name" --json "$@"
 }
 
 releases_json=$(nix_eval)

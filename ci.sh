@@ -8,6 +8,7 @@ channel=${NIXPKGS_CHANNEL:-nixos-unstable}
 registry=${CI_REGISTRY:-docker.io}
 registry_auth=${CI_REGISTRY_AUTH:-}
 image_prefix=${CI_PROJECT_PATH:-nixpkgs}
+system_name=${NIX_SYSTEM_NAME:-x86_64-linux}
 
 if [[ $channel == nixos-unstable ]]; then
   image_tag=latest
@@ -30,6 +31,7 @@ banner "Building images"
 nix-build \
   --no-out-link \
   --option sandbox true \
+  --argstr system "$system_name"
 
 if [[ $(git rev-parse --abbrev-ref HEAD) != master ]]; then
   banner "Skipping push on non-master branch"

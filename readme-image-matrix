@@ -3,9 +3,11 @@
 # Usage: ./dockerhub-image-matrix
 set -euo pipefail
 
+system_name=${NIX_SYSTEM_NAME:-x86_64-linux}
+
 ## Main ##
 
-releases_json=$(nix-instantiate --strict --eval --json)
+releases_json=$(nix-instantiate --strict --argstr system "$system_name" --eval --json)
 
 echo "| Image / Tag | Pull |"
 echo "| ---         | ---  |"
