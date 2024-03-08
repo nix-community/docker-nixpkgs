@@ -39,3 +39,27 @@ jobs:
           CI_REGISTRY_AUTH: '${{ secrets.REGISTRY_AUTH }}'
           NIXPKGS_CHANNEL: '${{ matrix.channel }}'
           NIX_SYSTEM_NAME: '${{ matrix.system }}'
+
+  push-manifest:
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        channel:
+          - nixos-unstable
+          - nixos-23.05
+          - nixos-23.11
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            extra-platforms = aarch64-linux
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
+      - run: nix-shell --run ./ci-manifests.sh
+        env:
+          CI_REGISTRY_AUTH: '${{ secrets.REGISTRY_AUTH }}'
+          NIXPKGS_CHANNEL: '${{ matrix.channel }}'
+          NIX_SYSTEM_NAME: '${{ matrix.system }}'

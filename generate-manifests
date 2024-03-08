@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#
+# Usage: ./push-all <registry> <image-prefix> <image-tag>
+set -euo pipefail
+
+registry=${1:-docker.io}
+image_prefix=${2:-nixpkgs}
+image_tag=${3:-latest}
+system_name=${NIX_SYSTEM_NAME:-x86_64-linux}
+
+releases_json=$(nix-instantiate --strict --argstr system "$system_name" --eval --json)
+
+echo "=== Generating manifests for $registry"
+
+for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
+  repository=$registry/$image_prefix/$attr
+  target_image=${repository}:${image_tag}
+  echo "--- attr=$attr target=$target_image"
+  podman manifest create "$target_image"
+  podman manifest add "$target_image" "docker://$repository:${image_tag}-x86_64-linux"
+  podman manifest add "$target_image" "docker://$repository:${image_tag}-aarch64-linux"
+  podman manifest push --all "$target_image" "docker://$target_image"
+done
+
+echo OK
