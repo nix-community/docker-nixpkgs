@@ -15,4 +15,8 @@ docker-nixpkgs.nix.override {
       '';
     })
   ] ++ extraContents;
+
+  extraEnv = [
+    "PATH=/root/.nix-profile/bin:/usr/bin:/bin" # Not sure how to just prepend
+  ];
 }
