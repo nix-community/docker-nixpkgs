@@ -41,6 +41,7 @@ nixpkgs channel describes.
 | ---            | ---         | ---                                               |
 | nixos-23.05    | nixos-23.05 | only minor versions that include security updates |
 | nixos-23.11    | nixos-23.11 | only minor versions that include security updates |
+| nixos-24.05    | nixos-24.05 | only minor versions that include security updates |
 | nixos-unstable | latest      | latest and greatest, major versions might change  |
 
 ## List of images
