@@ -12,3 +12,4 @@ build:
       - NIXPKGS_CHANNEL:
           - nixos-23.05
           - nixos-23.11
+          - nixos-24.05
