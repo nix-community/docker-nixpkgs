@@ -1,6 +1,7 @@
 { docker-nixpkgs
+, pkgs
 , nixUnstable
 }:
 docker-nixpkgs.nix.override {
-  nix = nixUnstable;
+  nix = pkgs.nixVersions.latest or pkgs.nixUnstable;
 }
