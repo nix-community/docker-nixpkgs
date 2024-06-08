@@ -11,6 +11,7 @@
 , openssh
 , xz
 , extraContents ? [ ]
+, extraEnv ? [ ]
 }:
 let
   image = dockerTools.buildImageWithNixDb {
@@ -58,7 +59,7 @@ let
         "PATH=/usr/bin:/bin"
         "SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
         "USER=root"
-      ];
+      ] ++ extraEnv;
     };
   };
 in
