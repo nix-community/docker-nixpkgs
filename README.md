@@ -63,6 +63,7 @@ on our custom domain, courtesy of [Scarf](https://scarf.sh).
 | [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy)| `docker pull docker.nix-community.org/nixpkgs/caddy` |
 | [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl)| `docker pull docker.nix-community.org/nixpkgs/curl` |
 | [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer)| `docker pull docker.nix-community.org/nixpkgs/devcontainer` |
+| [nixpkgs/devenv](https://hub.docker.com/r/nixpkgs/devenv)| `docker pull docker.nix-community.org/nixpkgs/devenv` |
 | [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose)| `docker pull docker.nix-community.org/nixpkgs/docker-compose` |
 | [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo)| `docker pull docker.nix-community.org/nixpkgs/hugo` |
 | [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl)| `docker pull docker.nix-community.org/nixpkgs/kubectl` |
