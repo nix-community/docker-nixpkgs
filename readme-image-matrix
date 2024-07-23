@@ -15,6 +15,6 @@ echo "| ---         | ---  |"
 for attr in $(echo "$releases_json" | jq -r "keys[]") ; do
   name=nixpkgs/$attr
   echo -n "| [$name](https://hub.docker.com/r/$name)"
-  echo -n "| \`docker pull docker.nix-community.org/$name\` "
+  echo -n "| \`docker pull $name\` "
   echo "|"
 done
