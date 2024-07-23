@@ -56,23 +56,23 @@ on our custom domain, courtesy of [Scarf](https://scarf.sh).
 <!-- BEGIN mdsh -->
 | Image / Tag | Pull |
 | ---         | ---  |
-| [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash)| `docker pull docker.nix-community.org/nixpkgs/bash` |
-| [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox)| `docker pull docker.nix-community.org/nixpkgs/busybox` |
-| [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix)| `docker pull docker.nix-community.org/nixpkgs/cachix` |
-| [nixpkgs/cachix-flakes](https://hub.docker.com/r/nixpkgs/cachix-flakes)| `docker pull docker.nix-community.org/nixpkgs/cachix-flakes` |
-| [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy)| `docker pull docker.nix-community.org/nixpkgs/caddy` |
-| [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl)| `docker pull docker.nix-community.org/nixpkgs/curl` |
-| [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer)| `docker pull docker.nix-community.org/nixpkgs/devcontainer` |
-| [nixpkgs/devenv](https://hub.docker.com/r/nixpkgs/devenv)| `docker pull docker.nix-community.org/nixpkgs/devenv` |
-| [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose)| `docker pull docker.nix-community.org/nixpkgs/docker-compose` |
-| [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo)| `docker pull docker.nix-community.org/nixpkgs/hugo` |
-| [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl)| `docker pull docker.nix-community.org/nixpkgs/kubectl` |
-| [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm)| `docker pull docker.nix-community.org/nixpkgs/kubernetes-helm` |
-| [nixpkgs/nginx](https://hub.docker.com/r/nixpkgs/nginx)| `docker pull docker.nix-community.org/nixpkgs/nginx` |
-| [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix)| `docker pull docker.nix-community.org/nixpkgs/nix` |
-| [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes)| `docker pull docker.nix-community.org/nixpkgs/nix-flakes` |
-| [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable` |
-| [nixpkgs/nix-unstable-static](https://hub.docker.com/r/nixpkgs/nix-unstable-static)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable-static` |
+| [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash)| `docker pull nixpkgs/bash` |
+| [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox)| `docker pull nixpkgs/busybox` |
+| [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix)| `docker pull nixpkgs/cachix` |
+| [nixpkgs/cachix-flakes](https://hub.docker.com/r/nixpkgs/cachix-flakes)| `docker pull nixpkgs/cachix-flakes` |
+| [nixpkgs/caddy](https://hub.docker.com/r/nixpkgs/caddy)| `docker pull nixpkgs/caddy` |
+| [nixpkgs/curl](https://hub.docker.com/r/nixpkgs/curl)| `docker pull nixpkgs/curl` |
+| [nixpkgs/devcontainer](https://hub.docker.com/r/nixpkgs/devcontainer)| `docker pull nixpkgs/devcontainer` |
+| [nixpkgs/devenv](https://hub.docker.com/r/nixpkgs/devenv)| `docker pull nixpkgs/devenv` |
+| [nixpkgs/docker-compose](https://hub.docker.com/r/nixpkgs/docker-compose)| `docker pull nixpkgs/docker-compose` |
+| [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo)| `docker pull nixpkgs/hugo` |
+| [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl)| `docker pull nixpkgs/kubectl` |
+| [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm)| `docker pull nixpkgs/kubernetes-helm` |
+| [nixpkgs/nginx](https://hub.docker.com/r/nixpkgs/nginx)| `docker pull nixpkgs/nginx` |
+| [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix)| `docker pull nixpkgs/nix` |
+| [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes)| `docker pull nixpkgs/nix-flakes` |
+| [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable)| `docker pull nixpkgs/nix-unstable` |
+| [nixpkgs/nix-unstable-static](https://hub.docker.com/r/nixpkgs/nix-unstable-static)| `docker pull nixpkgs/nix-unstable-static` |
 <!-- END mdsh -->
 ## Adding new images
 
