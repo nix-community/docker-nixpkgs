@@ -8,6 +8,7 @@ on:
   schedule:
     # Run once per day
     - cron: '0 0 * * *'
+
 jobs:
   build:
     strategy:
@@ -18,9 +19,14 @@ jobs:
           - nixos-unstable
           - nixos-24.05
         system:
-          - x86_64-linux
           - aarch64-linux
+          - x86_64-linux
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -33,9 +39,21 @@ jobs:
             extra-platforms = aarch64-linux
       - uses: DeterminateSystems/magic-nix-cache-action@main
 
-      - run: nix-shell --run ./ci.sh
+      - name: Push to Docker Hub
+        run: nix-shell --run ./ci.sh
         env:
+          CI_PROJECT_PATH: 'nixpkgs'
+          CI_REGISTRY: 'docker.io'
           CI_REGISTRY_AUTH: '${{ secrets.REGISTRY_AUTH }}'
+          NIXPKGS_CHANNEL: '${{ matrix.channel }}'
+          NIX_SYSTEM_NAME: '${{ matrix.system }}'
+
+      - name: Push to GitHub Pages
+        run: nix-shell --run ./ci.sh
+        env:
+          CI_PROJECT_PATH: 'nix-community/docker-nixpkgs'
+          CI_REGISTRY: 'ghcr.io'
+          CI_REGISTRY_AUTH: '${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}'
           NIXPKGS_CHANNEL: '${{ matrix.channel }}'
           NIX_SYSTEM_NAME: '${{ matrix.system }}'
 
