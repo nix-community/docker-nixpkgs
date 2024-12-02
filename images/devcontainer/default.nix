@@ -14,7 +14,7 @@
 , gnutar
 , gzip
 , iana-etc
-, iproute
+, iproute2
 , less
 , lib
 , nix
@@ -61,7 +61,7 @@ let
       (gcc-unwrapped // {
         outputs = builtins.filter (x: x != "libgcc") gcc-unwrapped.outputs;
       })
-      iproute
+      iproute2
     ];
   };
 
