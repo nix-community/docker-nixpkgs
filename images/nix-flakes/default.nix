@@ -1,10 +1,10 @@
 { docker-nixpkgs
-, nixFlakes
+, nixVersions
 , writeTextFile
 , extraContents ? [ ]
 }:
 docker-nixpkgs.nix.override {
-  nix = nixFlakes;
+  nix = nixVersions.stable;
   extraContents = [
     (writeTextFile {
       name = "nix.conf";
