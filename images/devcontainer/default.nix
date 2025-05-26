@@ -42,7 +42,11 @@ let
       nix
 
       # runtime dependencies of nix
-      cacert
+      # HACK: don't include the "hashed" output. It has overlapping files with
+      #       the "unbundled" output, and that breaks the build.
+      (cacert // {
+        outputs = builtins.filter (x: x != "hashed") cacert.outputs;
+      })
       gitReallyMinimal
       gnutar
       gzip

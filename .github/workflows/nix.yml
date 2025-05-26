@@ -19,6 +19,7 @@ jobs:
           - nixos-unstable
           - nixos-24.05
           - nixos-24.11
+          - nixos-25.05
         system:
           - aarch64-linux
           - x86_64-linux
@@ -67,6 +68,7 @@ jobs:
           - nixos-unstable
           - nixos-24.05
           - nixos-24.11
+          - nixos-25.05
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
