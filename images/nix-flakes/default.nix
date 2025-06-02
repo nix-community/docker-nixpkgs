@@ -12,6 +12,7 @@ docker-nixpkgs.nix.override {
       text = ''
         accept-flake-config = true
         experimental-features = nix-command flakes
+        max-jobs = auto
       '';
     })
   ] ++ extraContents;
