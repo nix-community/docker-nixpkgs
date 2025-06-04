@@ -84,11 +84,12 @@ let
     mkdir -p libexec/nix
     ln -s /bin/nix libexec/nix/build-remote
 
-    # Enable flakes
+    # Enable flakes and parallel building
     mkdir -p etc/nix
     cat <<NIX_CONFIG > etc/nix/nix.conf
     accept-flake-config = true
     experimental-features = nix-command flakes
+    max-jobs = auto
     NIX_CONFIG
 
     # Add run-as-user script
