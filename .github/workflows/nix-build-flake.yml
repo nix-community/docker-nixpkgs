@@ -19,26 +19,28 @@ jobs:
           - "x86_64-linux"
           - "aarch64-linux"
         nix_channel:
-          - "nixos-unstable"
-          - "nixos-22.11"
-          - "nixos-23.05"
+          - nixos-unstable
+          - nixos-24.05
+          - nixos-24.11
+          - nixos-25.05
         target_image:
           - bash
-          # - busybox
-          # - cachix
-          # - cachix-flakes
-          # - caddy
-          # - curl
+          - busybox
+          - cachix
+          - cachix-flakes
+          - caddy
+          - curl
           - devcontainer
-          # - docker-compose
-          # - hugo
-          # - kubectl
-          # - kubernetes-helm
-          # - nginx
-          # - nix
-          # - nix-flakes
-          # - nix-unstable
-          # - nix-unstable-static
+          - devenv
+          - docker-compose
+          - hugo
+          - kubectl
+          - kubernetes-helm
+          - nginx
+          - nix
+          - nix-flakes
+          - nix-unstable
+          - nix-unstable-static
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
@@ -74,26 +76,28 @@ jobs:
     strategy:
       matrix:
         nix_channel:
-          - "nixos-unstable"
-          - "nixos-22.11"
-          - "nixos-23.05"
+          - nixos-unstable
+          - nixos-24.05
+          - nixos-24.11
+          - nixos-25.05
         target_image:
           - bash
-          # - busybox
-          # - cachix
-          # - cachix-flakes
-          # - caddy
-          # - curl
+          - busybox
+          - cachix
+          - cachix-flakes
+          - caddy
+          - curl
           - devcontainer
-          # - docker-compose
-          # - hugo
-          # - kubectl
-          # - kubernetes-helm
-          # - nginx
-          # - nix
-          # - nix-flakes
-          # - nix-unstable
-          # - nix-unstable-static
+          - devenv
+          - docker-compose
+          - hugo
+          - kubectl
+          - kubernetes-helm
+          - nginx
+          - nix
+          - nix-flakes
+          - nix-unstable
+          - nix-unstable-static
     needs:
       - build
     steps:
