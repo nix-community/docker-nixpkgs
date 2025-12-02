@@ -25,8 +25,8 @@ banner() {
 
 cd "$(dirname "$0")"
 
-if [[ $(git rev-parse --abbrev-ref HEAD) != master ]]; then
-  banner "Skipping push on non-master branch"
+if [[ $(git rev-parse --abbrev-ref HEAD) != main ]]; then
+  banner "Skipping push on non-main branch"
   exit
 fi
 

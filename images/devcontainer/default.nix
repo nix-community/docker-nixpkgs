@@ -130,7 +130,7 @@ let
       ];
       Labels = {
         # https://github.com/microscaling/microscaling/blob/55a2d7b91ce7513e07f8b1fd91bbed8df59aed5a/Dockerfile#L22-L33
-        "org.label-schema.vcs-ref" = "master";
+        "org.label-schema.vcs-ref" = "main";
         "org.label-schema.vcs-url" = "https://github.com/nix-community/docker-nixpkgs";
       };
     };

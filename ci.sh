@@ -33,8 +33,8 @@ nix-build \
   --option sandbox true \
   --argstr system "$system_name"
 
-if [[ $(git rev-parse --abbrev-ref HEAD) != master ]]; then
-  banner "Skipping push on non-master branch"
+if [[ $(git rev-parse --abbrev-ref HEAD) != main ]]; then
+  banner "Skipping push on non-main branch"
   exit
 fi
 
