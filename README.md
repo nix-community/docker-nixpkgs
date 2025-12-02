@@ -52,9 +52,11 @@ All images are automatically built and published to Docker Hub, and served
 on our custom domain, courtesy of [Scarf](https://scarf.sh).
 
 `> ./readme-image-matrix`
+
 <!-- BEGIN mdsh -->
 | Image / Tag | Pull |
 | ---         | ---  |
+| [nixpkgs/attic](https://hub.docker.com/r/nixpkgs/attic)| `docker pull docker.nix-community.org/nixpkgs/attic` |
 | [nixpkgs/bash](https://hub.docker.com/r/nixpkgs/bash)| `docker pull docker.nix-community.org/nixpkgs/bash` |
 | [nixpkgs/busybox](https://hub.docker.com/r/nixpkgs/busybox)| `docker pull docker.nix-community.org/nixpkgs/busybox` |
 | [nixpkgs/cachix](https://hub.docker.com/r/nixpkgs/cachix)| `docker pull docker.nix-community.org/nixpkgs/cachix` |
@@ -67,11 +69,14 @@ on our custom domain, courtesy of [Scarf](https://scarf.sh).
 | [nixpkgs/hugo](https://hub.docker.com/r/nixpkgs/hugo)| `docker pull docker.nix-community.org/nixpkgs/hugo` |
 | [nixpkgs/kubectl](https://hub.docker.com/r/nixpkgs/kubectl)| `docker pull docker.nix-community.org/nixpkgs/kubectl` |
 | [nixpkgs/kubernetes-helm](https://hub.docker.com/r/nixpkgs/kubernetes-helm)| `docker pull docker.nix-community.org/nixpkgs/kubernetes-helm` |
+| [nixpkgs/maddy](https://hub.docker.com/r/nixpkgs/maddy)| `docker pull docker.nix-community.org/nixpkgs/maddy` |
 | [nixpkgs/nginx](https://hub.docker.com/r/nixpkgs/nginx)| `docker pull docker.nix-community.org/nixpkgs/nginx` |
 | [nixpkgs/nix](https://hub.docker.com/r/nixpkgs/nix)| `docker pull docker.nix-community.org/nixpkgs/nix` |
 | [nixpkgs/nix-flakes](https://hub.docker.com/r/nixpkgs/nix-flakes)| `docker pull docker.nix-community.org/nixpkgs/nix-flakes` |
 | [nixpkgs/nix-unstable](https://hub.docker.com/r/nixpkgs/nix-unstable)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable` |
 | [nixpkgs/nix-unstable-static](https://hub.docker.com/r/nixpkgs/nix-unstable-static)| `docker pull docker.nix-community.org/nixpkgs/nix-unstable-static` |
+| [nixpkgs/pocket-id](https://hub.docker.com/r/nixpkgs/pocket-id)| `docker pull docker.nix-community.org/nixpkgs/pocket-id` |
+| [nixpkgs/yarr](https://hub.docker.com/r/nixpkgs/yarr)| `docker pull docker.nix-community.org/nixpkgs/yarr` |
 <!-- END mdsh -->
 ## Adding new images
 
