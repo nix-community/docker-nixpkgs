@@ -8,6 +8,9 @@ image_prefix=${2:-nixpkgs}
 image_tag=${3:-latest}
 system_name=${NIX_SYSTEM_NAME:-x86_64-linux}
 
+# overlayfs is not usable on GitHub Actions runners; fall back to vfs.
+export STORAGE_DRIVER=vfs
+
 releases_json=$(nix-instantiate --strict --argstr system "$system_name" --eval --json)
 
 echo "=== Generating manifests for $registry"
