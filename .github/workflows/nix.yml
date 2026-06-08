@@ -17,8 +17,8 @@ jobs:
       matrix:
         channel:
           - nixos-unstable
-          - nixos-25.05
           - nixos-25.11
+          - nixos-26.05
         system:
           - aarch64-linux
           - x86_64-linux
