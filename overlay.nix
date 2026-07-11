@@ -8,6 +8,10 @@ in
   # builder stuff can be in the top-level
   buildCLIImage = pkgs.callPackage ./lib/buildCLIImage.nix { };
 
+  flakeParameters = {
+    nixpkgsChannel = if builtins.getEnv("NIXPKGS_CHANNEL") != "" then builtins.getEnv("NIXPKGS_CHANNEL") else "nixos-23.05";
+  };
+
   # docker images must be lower-cased
   docker-nixpkgs = importDir (path: pkgs.callPackage path { }) ./images;
 
