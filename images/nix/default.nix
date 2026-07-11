@@ -12,6 +12,7 @@
 , xz
 , extraContents ? [ ]
 , extraEnv ? [ ]
+, extraExtraCommands ? ""
 }:
 let
   image = dockerTools.buildImageWithNixDb {
@@ -46,7 +47,7 @@ let
 
       # need a HOME
       mkdir -vp root
-    '';
+    '' + extraExtraCommands;
 
     config = {
       Cmd = [ "/bin/bash" ];
